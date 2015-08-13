@@ -21,7 +21,7 @@ public class WeightedQuickUnion extends QuickUnion
 
         if (p_root != q_root)
         {
-            if (_size[p_root] > _size[q_root])
+            if (_size[p_root] >= _size[q_root])
             {
                 _id[q_root] = p_root;
 
@@ -35,12 +35,6 @@ public class WeightedQuickUnion extends QuickUnion
                 _size[q_root] += _size[p_root];
             }
         }
-
-        for (int i : _id) System.out.printf("%d ", i);
-
-        System.out.println();
-
-        for (int i : _size) System.out.printf("%d ", i);
     }
 
     private int[] _size;

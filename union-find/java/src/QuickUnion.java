@@ -2,16 +2,11 @@
  * Created by petergoldsborough on 08/12/15.
  */
 
-public class QuickUnion implements UnionFind
+public class QuickUnion extends UnionFind
 {
     QuickUnion(int N)
     {
-        _id = new int[N];
-        
-        for (int i = 0; i < N; ++i)
-        {
-            _id[i] = i;
-        }
+        super(N);
     }
     
     public void union(int p, int q)
@@ -37,12 +32,4 @@ public class QuickUnion implements UnionFind
         
         return i;
     }
-
-    protected int _alternative_root(int i)
-    {
-        return (i == _id[i]) ? i : _root(_id[i]);
-    }
-    
-    
-    protected int[] _id;
 }

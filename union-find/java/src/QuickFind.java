@@ -2,18 +2,11 @@
  * Created by petergoldsborough on 08/12/15.
  */
 
-public class QuickFind implements UnionFind
+public class QuickFind extends UnionFind
 {
     QuickFind(int N)
     {
-        this.N = N;
-
-        _id = new int[N];
-
-        for (int i = 0; i < N; ++i)
-        {
-            _id[i] = i;
-        }
+        super(N);
     }
 
     public void union(int p, int q)
@@ -24,7 +17,7 @@ public class QuickFind implements UnionFind
 
             int q_id = _id[q];
 
-            for (int i = 0; i < N; ++i)
+            for (int i = 0; i < _N; ++i)
             {
                 if (_id[i] == p_id) _id[i] = q_id;
             }
@@ -35,8 +28,4 @@ public class QuickFind implements UnionFind
     {
         return _id[p] == _id[q];
     }
-
-    private int N;
-
-    private int[] _id;
 };

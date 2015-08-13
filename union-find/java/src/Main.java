@@ -15,7 +15,7 @@ public class Main
 
         int N = scanner.nextInt();
 
-        UnionFind uf = new WeightedCompressedQuickUnion(N);
+        UnionFind uf = new WeightedQuickUnion(N);
 
         for ( ; ; )
         {
@@ -34,6 +34,10 @@ public class Main
 
                 System.out.printf("New union: %d -> %d\n", p, q);
             }
+
+            uf.print();
+
+            //  0-5 5-7 6-5 9-1 8-7 3-4 9-3 5-2 2-4
         }
     }
 };
