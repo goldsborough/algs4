@@ -12,8 +12,8 @@ class WeightedQuickUnion(QuickUnion):
 		self.sizes = [1 for x in range(N)]
 
 	def union(self, p, q):
-		p_root = self.root(p)
-		q_root = self.root(q)
+		p_root = self.getRoot(p)
+		q_root = self.getRoot(q)
 		
 		if p_root != q_root:
 			if self.sizes[p_root] >= self.sizes[q_root]:

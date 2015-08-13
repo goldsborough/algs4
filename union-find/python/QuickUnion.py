@@ -10,14 +10,14 @@ class QuickUnion(UnionFind.UnionFind):
 		self.roots = [x for x in range(N)]
 
 	def union(self, p, q):
-		p_root = self.root(p)
-		q_root = self.root(q)
+		p_root = self.getRoot(p)
+		q_root = self.getRoot(q)
 		self.roots[q_root] = p_root
 
 	def connected(self, p, q):
-		return self.root(p) == self.root(q)
+		return self.getRoot(p) == self.getRoot(q)
 
-	def root(self, i):
+	def getRoot(self, i):
 		while i != self.roots[i]:
 			i = self.roots[i]
 		return i

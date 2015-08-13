@@ -252,3 +252,4 @@ lectures/
 out/
 production/
 assignment/
+*.xcodeproj

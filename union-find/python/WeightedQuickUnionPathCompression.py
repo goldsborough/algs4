@@ -10,7 +10,7 @@ class WeightedQuickUnionPathCompression(WeightedQuickUnion):
 	def __init__(self, N):
 		super().__init__(N)
 
-	def root(self, i):
+	def getRoot(self, i):
 		while i != self.roots[i]:
 			self.roots[i] = self.roots[self.roots[i]]
 			i = self.roots[i]
