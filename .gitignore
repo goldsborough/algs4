@@ -251,5 +251,4 @@ lectures/
 .idea
 out/
 production/
-assignment/
 *.xcodeproj

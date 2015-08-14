@@ -32,12 +32,12 @@ public class Main
             {
                 uf.union(p, q);
 
-                System.out.printf("New union: %d -> %d\n", p, q);
+                System.out.printf("New union: %d -> %d
+", p, q);
             }
 
             uf.print();
-
-            //  0-5 5-7 6-5 9-1 8-7 3-4 9-3 5-2 2-4
         }
     }
 };
+
