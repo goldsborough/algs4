@@ -140,6 +140,6 @@ The upper bound and worst case is that there are no duplicates and we perform N^
 # Memory
 
 - Arrays in Java have an overhead of 24 bytes, i.e. if you have an array of N 32-bit (4-byte) integers the total array will have a space usage of 4N + 24 bytes.
-- Object overhead in Java is 16 bytes. Nested classes 8 bytes (pointer to enclosing class).
+- Object overhead in Java is 16 bytes. Nested classes *an extra* 8 bytes (pointer to enclosing class), unless it is declared static. Nested classes also have the object overhead of 16 bytes though.
 - The size of a reference (pointer in C/C++) is 8 bytes. 
 - Padding mandates that each object be a multiple of 8 bytes (so extra bytes may be added).

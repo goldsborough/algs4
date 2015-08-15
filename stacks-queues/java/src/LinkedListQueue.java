@@ -19,7 +19,11 @@ public class LinkedListQueue<T>
     {
         T item = _first.item;
 
-        _first = _first.next;
+        Node next = _first.next;
+
+        _first = null;
+
+        _first = next;
 
         --_size;
 

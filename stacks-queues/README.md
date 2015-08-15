@@ -68,6 +68,27 @@ Interface:
 - isEmpty(): whether or not the queue is empty
 - size(): returns the size of the queue
 
+Implementations:
 
+- Linked list: have nodes with pointers to the next element, enqueue by adding elements to the back and dequeue from the front. 
+- Array: Either enqueue by pushing back and dequeue by popping from the front and then moving all subsequent elements back by one index, or use a circular buffer with a first and last index, both wrapping around the array (increment modulo the capacity).
+
+Applications:
+
+- Back button in a Web browser.
+- Recursion in a compiler.
+- Undo in a word processor.
+
+Often can model recursion with an explicit stack.
+
+## Bag
+
+Data structure where the order of retrieval is not important. We just add elements however we want and retrieve them however we want.
+
+Interface:
+
+- add(item): adds an item
+- size(): returns the size
+- iterator(): returns an iterator
 
 
