@@ -1,6 +1,8 @@
 #!/usr/local/bin/python3
 # -*- coding: utf-8 -*-
 
+import timeit
+
 def threesumA(sequence):
 	count = 0
 	length = len(sequence)
@@ -35,6 +37,15 @@ def threesumB(sequence):
 
 def main():
 	l = [5, 3, -8, 8, 7, -2, 0, -10, 10]
+	"""
+	print(timeit.timeit('import threesum;'
+						'values = [5, 3, -8, 8, 7, -2, 0, -10, 10];'
+						'threesum.threesumA(values)'))
+
+	print(timeit.timeit('import threesum;'
+		 				'values = [5, 3, -8, 8, 7, -2, 0, -10, 10];'
+				  		'threesum.threesumB(values)'))
+	"""
 	print(threesumA(l))
 	print(threesumB(l))
 
