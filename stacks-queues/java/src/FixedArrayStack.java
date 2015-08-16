@@ -4,7 +4,7 @@
 
 public class FixedArrayStack<T>
 {
-    FixedArrayStack(int capacity)
+    public FixedArrayStack(int capacity)
     {
         array = (T[]) new Object[capacity];
         size = capacity;

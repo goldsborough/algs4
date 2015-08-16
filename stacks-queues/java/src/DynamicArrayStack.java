@@ -5,12 +5,12 @@
 public class DynamicArrayStack<T>
 {
 
-    DynamicArrayStack()
+    public DynamicArrayStack()
     {
         _array = (T[]) new Object[1];
     }
 
-    DynamicArrayStack(int capacity)
+    public DynamicArrayStack(int capacity)
     {
         _array = (T[]) new Object[capacity];
     }

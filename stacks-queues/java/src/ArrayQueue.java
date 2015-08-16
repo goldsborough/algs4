@@ -4,12 +4,12 @@
 
 public class ArrayQueue<T>
 {
-    ArrayQueue()
+    public ArrayQueue()
     {
         _data = (T[]) new Object[1];
     }
 
-    ArrayQueue(int capacity)
+    public ArrayQueue(int capacity)
     {
         _data = (T[]) new Object[capacity];
     }
