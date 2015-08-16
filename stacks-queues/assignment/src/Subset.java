@@ -8,7 +8,7 @@ public class Subset
 	{
 		RandomizedQueue<String> queue = new RandomizedQueue<>();
 
-		int k = StdIn.readInt();
+		int k = Integer.parseInt(args[0]);
 
 		while(k-- > 0) queue.enqueue(StdIn.readString());
 

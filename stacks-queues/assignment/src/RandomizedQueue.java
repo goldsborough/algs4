@@ -55,7 +55,7 @@ public class RandomizedQueue<Item> implements Iterable<Item>
         return items[randomIndex()];
     }
 
-    public Itr iterator()
+    public Iterator<Item> iterator()
     {
         return new Itr();
     }
