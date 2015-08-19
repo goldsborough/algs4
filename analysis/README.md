@@ -64,7 +64,7 @@
 	+ Software compiler, intepreter, garbage collector
 	+ System: OS, network, other applications
 
-# Mathematical Models
+## Mathematical Models
 
 - Analyze individual operations to determine complexity
 - Simplification 1
@@ -91,9 +91,9 @@
 
 - We say the algorithm "is proportional to" e.g. constant time
 
-# Theory of Algorithms
+## Theory of Algorithms
 
-## Types of analyses
+### Types of analyses
 
 1. Best case: Lower bound on cost.
 	
@@ -112,7 +112,7 @@
 
 We focus on the worst case so that we can ignore the variability of input (sizes).
 
-## Notation
+### Notation
 
 - Big Theta: Describes the order of growth mathematically and thus classifies the algorithm. Example: Θ(Ν^2)
 
@@ -137,9 +137,30 @@ The lower bound and best case here is that the first comparison operation alread
 
 The upper bound and worst case is that there are no duplicates and we perform N^2 comparison operations, therefore O(N^2).
 
-# Memory
+## Memory
 
 - Arrays in Java have an overhead of 24 bytes, i.e. if you have an array of N 32-bit (4-byte) integers the total array will have a space usage of 4N + 24 bytes.
 - Object overhead in Java is 16 bytes. Nested classes *an extra* 8 bytes (pointer to enclosing class), unless it is declared static. Nested classes also have the object overhead of 16 bytes though.
 - The size of a reference (pointer in C/C++) is 8 bytes. 
 - Padding mandates that each object be a multiple of 8 bytes (so extra bytes may be added).
+
+# Introduction to Algorithms
+
+## Loop Invariants
+
+Loop invariants help us to understand whether and why an algorithm is correct. For insertion sort, the loop invariants reads:
+
+1. For each position of the iterator in the for loop, all values to the left of the iterator are the elements that were initially in that subarray, but now in sorted order.
+
+2. For each position of the iterator in the for loop, none of the values to the right of the iterator have yet been looked at.
+
+We must show three things about a loop invariant:
+
+1. Initialization: It is true prior to the first iteration of the loop. For a for loop, this point is immediately after the first assignment of an initial value to the loop variable and before the first test in the loop header.
+
+2. Maintenance: If it is true before an iteration of the loop, it remains true before the next iteration (after the next assignment, before the next check).
+
+3. Termination: When the loop termiantes, the invariant still holds true and gives us a useful property that helps show that the algorhtm is correct.
+
+
+

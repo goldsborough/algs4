@@ -194,3 +194,12 @@ Graham Scan algorithm:
 - Sort points by polar angle with with *p*.
 - Consider points in order, discard all points that do not create a counter-clockwise turn.
 
+- How to find point *p* with smallest *y*-coordinate? Sorting.
+
+- How to sort ponits by polar angle with respect to *p*. Define a total order.
+
+- How to determine whether p_1 -> p_2 -> p_3 is a counter-clockwise turn?
+
+- How to sort efficiently? Mergesort.
+
+
