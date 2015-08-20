@@ -56,6 +56,8 @@ public class ExtendedQuick extends BasicQuick
 			else ++itr;
 		}
 
+		if (! less(sequence, pivot, last)) ++last;
+
 		swap(sequence, pivot, first - 1);
 
 		return new Boundary(first - 1, last);
