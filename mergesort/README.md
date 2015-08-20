@@ -82,7 +82,7 @@ Insertion sort and mergesort are stable, but not selection sort and shellsort.
 
 One question to ask is: does the algorithm check "less than" or "less than or equal". "less than" will result in stable sort for insertion sort.
 
-Proof by counter-example: Long-distance exchagne might move an item past some equal item. Selection sort is not stable. Just like shell sort: long-distance exchange.
+Proof by counter-example: Long-distance exchange might move an item past some equal item. Selection sort is not stable. Just like shell sort: long-distance exchange.
 
 Mergesort: Stability of mergesort depends on the merge operation, which depends on the comparison operation. To be precise, mergesort is stable if we pick the value from *the left subarray* when comparing values from the left and right subarrays that are equal (because the left value was also before the right value before sorting the subarrays).
 
