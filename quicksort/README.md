@@ -50,7 +50,7 @@ Practical improvements:
 
 Given an array of *N* items, find the k-th largest.
 
-Quick-select: Partition the array to find its median, then go left if you need a k lower than the position of the median or right if you need a graeter k. The position median of the median always indicates the how-many-eth largest value it is.
+Quick-select: Partition the array to find its median, then go left if you need a k lower than the position of the median or right if you need a greater k. The position median of the median always indicates the how-many-eth largest value it is.
 
 Complexity:
  - Probably N lg N upper bound
@@ -105,6 +105,7 @@ Questions to consider for picking or implementing a sorting algorithm:
 - Is your array randomly ordered?
 - Need guaranteed performance?
 
+
 Elementary sorts may be the method of choice for some combination of the above attributes.
 
 __No algorithm can cover all combinations of attributes__.
@@ -112,20 +113,14 @@ __No algorithm can cover all combinations of attributes__.
 The system sort is usually good enough, though.
 
 Algorithm | In-place? | Stable? | Worst | Average | Best  | Remarks
----------- ----------- --------- ------- --------- ------- -------------------------------------
+----------|-----------|---------|-------|---------|-------|-------------------------------------
 Selection |    Yes    |    No   | N^2/2 |  N^2/2  | N^2/2 | N exchanges
----------- ----------- --------- ------- --------- ------- -------------------------------------
 Insertion |    Yes    |   Yes   | N^2/2 | N^2/4   |   N   | Good for small N or partially ordered
----------- ----------- --------- ------- --------- ------- -------------------------------------
-  Shell   |    Yes    |   No    |  ?    |    ?    |   N   | Tight code, subquadratic
----------- ----------- --------- ------- --------- ------- -------------------------------------
-  Merge   |    No     |   Yes   | N lgN |  N lgN  | N lgN | N lg N guarantee, stable
----------- ----------- --------- ------- --------- ------- -------------------------------------
-  Quick   |   Yes     |   No    | N^2/2 |  2N lgN | N lgN | Fastest in practice, usually N lgN
----------- ----------- --------- ------- --------- ------- -------------------------------------
- Quick3   |   Yes     |   No    | N^2/2 |  2N lgN |   N   | Improves Quicksort for duplicates
----------- ----------- --------- ------- --------- ------- -------------------------------------
-  ???     |   Yes     |  Yes    | N lgN |  N lgN  | N lgN | Holy sorting grail
+Shell     |    Yes    |   No    |  ?    |    ?    |   N   | Tight code, subquadratic
+Merge     |    No     |   Yes   | N lgN |  N lgN  | N lgN | N lg N guarantee, stable
+Quick     |   Yes     |   No    | N^2/2 |  2N lgN | N lgN | Fastest in practice, usually N lgN
+Quick3    |   Yes     |   No    | N^2/2 |  2N lgN |   N   | Improves Quicksort for duplicates
+???       |   Yes     |  Yes    | N lgN |  N lgN  | N lgN | Holy sorting grail
 
 
 

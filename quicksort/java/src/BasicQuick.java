@@ -115,18 +115,18 @@ public class BasicQuick
 
 		swap(sequence, first++, median);
 
-		for ( ; ; )
+		while (first != last)
 		{
-			while(first <= last && less(sequence, first, pivot)) ++first;
+			while(first != last && less(sequence, first, pivot)) ++first;
 
-			while (last >= first && less(sequence, pivot, last)) --last;
-
-			if (first >= last) break;
+			while (last != first && less(sequence, pivot, last)) --last;
 
 			swap(sequence, first, last);
 		}
 
-		swap(sequence, pivot, last);
+		if (less(sequence, last, pivot)) swap(sequence, pivot, last);
+
+		else swap(sequence, pivot, --last);
 
 		return last;
 	}
