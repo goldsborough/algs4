@@ -93,7 +93,7 @@ public class Heap<Key extends Comparable<Key>>
 
 			int second = _child(key, 1);
 
-			if (second < _size) child = _less(first, second) ? second : first;
+			if (second <= _size && _less(first, second)) child = second;
 
 			if (_less(key, child)) _swap(key, child);
 
@@ -120,7 +120,7 @@ public class Heap<Key extends Comparable<Key>>
 
 		_keys = (Key[]) new Comparable[capacity];
 
-		for (int i = 0; i < _size; ++i)
+		for (int i = 1; i <= _size; ++i)
 		{
 			_keys[i] = old[i];
 		}
