@@ -22,11 +22,11 @@ public:
 	static const int MINIMIUM_CAPACITY = 4 + 1;
 	
 	Heap(int capacity = MINIMIUM_CAPACITY,
-		 const Comparison& compare = Comparison())
+		 const Comparison& comparison = Comparison())
 	: _keys(new Key[capacity])
 	, _capacity(capacity)
 	, _size(0)
-	, _compare(compare)
+	, _comparison(comparison)
 	{ }
 	
 	~Heap()
@@ -103,11 +103,16 @@ private:
 		_keys[second] = temp;
 	}
 	
+	bool _compare(index_t first, index_t second)
+	{
+		return _comparison(_keys[first], _keys[second]);
+	}
+	
 	void _swim(index_t key)
 	{
 		index_t parent = _parent(key);
 		
-		while (_keys[parent] < _keys[key])
+		while (_compare(parent, key))
 		{
 			_swap(parent, key);
 			
@@ -127,9 +132,12 @@ private:
 			
 			index_t right = _right(key);
 			
-			if (right <= _size && _keys[right] > _keys[left]) child = right;
+			if (right <= _size)
+			{
+				child = _compare(left, right) ? right : left;
+			}
 			
-			if (_keys[child] > _keys[key]) _swap(child, key);
+			if (_compare(key, child)) _swap(child, key);
 			
 			else break;
 			
@@ -157,7 +165,7 @@ private:
 		_capacity = capacity;
 	}
 	
-	Comparison _compare;
+	Comparison _comparison;
 	
 	index_t _size;
 	

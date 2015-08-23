@@ -1,144 +1,90 @@
 /**
- * Created by petergoldsborough on 08/23/15.
+ * Created by petergoldsborough on 08/24/15.
  */
-
-public class Heap<Key extends Comparable<Key>>
+public class Heap
 {
-	public static int MINIMUM_CAPACITY = 4 + 1;
-
-	public void insert(Key key)
+	public static void sort(Comparable[] sequence)
 	{
-		_keys[++_size] = key;
+		for (int i = sequence.length/2; i >= 0; --i)
+		{
+			sink(sequence, i, sequence.length);
+		}
 
-		_swim(_size);
-
-		if (_size == _keys.length) _resize();
-	}
-
-	public Key deleteMax()
-	{
-		Key key = _keys[1];
-
-		_swap(1, _size--);
-		_sink(1);
-
-		if (_size == _keys.length/4) _resize();
-
-		return key;
-	}
-
-	public Key max()
-	{
-		return _keys[1];
-	}
-
-	public int size()
-	{
-		return _size;
-	}
-
-	public boolean isEmpty()
-	{
-		return _size == 0;
+		for (int i = sequence.length - 1; i > 0; --i)
+		{
+			swap(sequence, 0, i);
+			sink(sequence, 0, i);
+		}
 	}
 
 	public static void main(String[] args)
 	{
-		Heap<Integer> heap = new Heap<>();
+		Integer[] array = new Integer[]{4, -1, 3, 0, 10, 5, 8, -3};
 
-		heap.insert(5);
-		heap.insert(10);
-		heap.insert(-2);
-		heap.insert(0);
+		Heap.sort(array);
 
-		System.out.println(heap.size());
-
-		System.out.println(heap.deleteMax());
-
-		System.out.println(heap.size());
-
-		System.out.println(heap.deleteMax());
-		System.out.println(heap.deleteMax());
-		System.out.println(heap.deleteMax());
-
-		System.out.println(heap.isEmpty());
-	}
-
-	private boolean _less(int first, int second)
-	{
-		return _keys[first].compareTo(_keys[second]) < 0;
-	}
-
-	private void _swim(int key)
-	{
-		int parent = _parent(key);
-
-		while (_less(parent, key))
+		for (int i = 0; i < array.length; ++i)
 		{
-			_swap(parent, key);
-
-			key = parent;
-
-			parent = _parent(key);
+			System.out.println(array[i]);
 		}
 	}
 
-	private void _sink(int key)
+	private static void swap(Comparable[] sequence, int first, int second)
 	{
-		while (key < _size)
+		Comparable temp = sequence[first];
+		sequence[first] = sequence[second];
+		sequence[second] = temp;
+	}
+
+	private static boolean less(Comparable[] sequence, int first, int second)
+	{
+		return sequence[first].compareTo(sequence[second]) < 0;
+	}
+
+	private static void swim(Comparable[] sequence, int index)
+	{
+		int parent = parent(index);
+
+		while (less(sequence, parent, index))
 		{
-			int first = _child(key, 0), child = first;
+			swap(sequence, parent, index);
+			index = parent;
+			parent = parent(index);
+		}
+	}
 
-			if (first >= _size) break;
+	private static void sink(Comparable[] sequence, int index, int last)
+	{
+		while (index < last)
+		{
+			int left = left(index), child = left;
 
-			int second = _child(key, 1);
+			if (left >= last) break;
 
-			if (second <= _size && _less(first, second)) child = second;
+			int right = right(index);
 
-			if (_less(key, child)) _swap(key, child);
+			if (right < last && less(sequence, left, right)) child = right;
+
+			if (less(sequence, index, child)) swap(sequence, index, child);
 
 			else break;
 
-			key = child;
+			index = child;
 		}
 	}
 
-	private void _swap(int first, int second)
+	private static int parent(int index)
 	{
-		Key temp = _keys[first];
-		_keys[first] = _keys[second];
-		_keys[second] = temp;
+		return index > 1 ? index/2 : 1;
 	}
 
-	private void _resize()
+	private static int left(int index)
 	{
-		int capacity = _size * 2;
-
-		if (capacity < MINIMUM_CAPACITY) return;
-
-		Key[] old = _keys;
-
-		_keys = (Key[]) new Comparable[capacity];
-
-		for (int i = 1; i <= _size; ++i)
-		{
-			_keys[i] = old[i];
-		}
-
-		old = null;
+		return 2 * index;
 	}
 
-	private int _parent(int key)
+	private static int right(int index)
 	{
-		return key > 1 ? key/2 : 1;
+		return 2 * index + 1;
 	}
-
-	private int _child(int key, int which)
-	{
-		return 2 * key + which;
-	}
-
-	private int _size = 0;
-
-	private Key[] _keys = (Key[]) new Comparable[MINIMUM_CAPACITY];
 }

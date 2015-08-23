@@ -106,3 +106,29 @@ Complexity:
 - max: 1
 
 Make sure heap nodes are immutable (const/final).
+
+# Heapsort
+
+Plan:
+1. Create max-heap with all *N* keys
+	- Iterate through the array backwards, starting at the midpoint *N/2* (all nodes after that are single heaps)
+	- Sink each node
+2. Repeadetly remove the maximum key
+	- Delete maximum operation: swap max (at root) with last, then sink new root.
+
+Mathematical analysis:
+
+- N sink operations, each performing a maximum of lg N steps -> N lg N
+- Heap construction uses <= 2 N compares and exchanges.
+
+Significance: In-place and N lg N worst case.
+
+- Mergesort: Guaranteed N lg N, but not in-place.
+- Quicksort: In-place, but quadratic time in worst case.
+- Heapsort: Yes!
+
+Practically:
+
+- Inner loop longer than quicksort (index arithmetic, child comparisons (which greater)).
+- Makes poor use of cache memory (references to memory are all over the place); quicksort always looks at nearby addresses in memory.
+- Not stable.

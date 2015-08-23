@@ -1,19 +1,28 @@
 #include "Heap.hpp"
+#include "Heapsort.hpp"
 
 #include <iostream>
 
+template<typename T, std::size_t N>
+T* begin(T (&array) [N])
+{
+	return array;
+}
+
+template<typename T, std::size_t N>
+T* end(T (&array) [N])
+{
+	return array + N;
+}
+
 int main(int argc, char * argv[])
 {
-	Heap<int> heap;
+	int array [] = {0, 4, -2, 10, 7, -3, 20, 6, 5, 1};
 	
-	heap.insert(5);
-	heap.insert(10);
-	heap.insert(-1);
-	heap.insert(7);
-	heap.insert(3);
+	hsort(begin(array), end(array));
 	
-	while (! heap.empty())
+	for (std::size_t i = 0; i < 10; ++i)
 	{
-		std::cout << heap.size() << " " << heap.delete_max() << "\n";
+		std::cout << array[i] << " ";
 	}
 }
