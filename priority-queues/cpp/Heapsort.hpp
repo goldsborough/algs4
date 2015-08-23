@@ -62,13 +62,6 @@ private:
 		*second = temp;
 	}
 	
-	Itr _parent(Itr begin, Itr itr)
-	{
-		std::size_t distance = std::distance(begin, itr);
-		
-		return begin + distance/2;
-	}
-	
 	Itr _left(Itr begin, Itr itr)
 	{
 		std::size_t distance = std::distance(begin, itr) * 2 + 1;

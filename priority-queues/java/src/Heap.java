@@ -73,11 +73,6 @@ public class Heap
 		}
 	}
 
-	private static int parent(int index)
-	{
-		return index > 1 ? index/2 : 1;
-	}
-
 	private static int left(int index)
 	{
 		return 2 * index;
