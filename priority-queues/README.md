@@ -132,3 +132,13 @@ Practically:
 - Inner loop longer than quicksort (index arithmetic, child comparisons (which greater)).
 - Makes poor use of cache memory (references to memory are all over the place); quicksort always looks at nearby addresses in memory.
 - Not stable.
+
+## Event-Driven Simulation
+
+- Simulate the motion of N moving particles that behave according to the laws of elastic collision.
+
+Hard disc model:
+- Moving particles interact via eleastic collisions with each other and walls.
+- Each particle is a disc with known position, vlcoity, mass and radius.
+- No other forces (like gravity).
+
