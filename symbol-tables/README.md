@@ -87,7 +87,7 @@ Symmetrics order: Each node has a key, and every node's key is:
 
 For put/insert, use recursive method that returns a new node if the current key is null, else the key again after performing another step of recursion (usually the node/key returned will be the same one).
 
-Cost is always lg(depth of node) + 1.
+Cost is always lg(depth of node) + 1 = h (height).
 
 Tree is like a quicksort-partition: all elements on the left than the pivot are less, all to the right are greater.
 
@@ -151,4 +151,108 @@ DeleteMin:
 - Update subtree counts (still 1 + size of left + size of right).
 
 Deletion: O(sqrt(N))
+
+## Balanced Trees
+
+### 2-3 tree
+
+Allow 1 or 2 keys per node
+- 2-node: one key, two children
+- 3-node: two keys, three children
+
+Perfect balance: Every path from root to null link has same length.
+Symmetric order: Inorder traversal yields keys in ascending order.
+
+Insert into a 2-node at bottom:
+- Search for key, as usual.
+- Replace 2-node with 3-node.
+
+Insert into a 3-node at bottom:
+- Add new key to 3-node to create temporary 4-node.
+- Move middle key in 4-node into parent.
+
+To move Z into this tree (P is a 2-node, S/Z is a 3-node):
+  
+   R
+  / \
+ P  S/X
+/ \ /|\
+
+Z is temporarily moved into the S/X three node (creates a 4-node):
+
+   R
+  / \
+ P  S/X/Z
+/ \ /| |\
+
+Then the middle of the three keys is moved up to the parent node to create a three-node between R/X, and the smallest of S/X/Z is made the middle node of the newly created three-node at R/X. Z remains as a two-node to the right of the R/X three node:
+
+   R/X
+  / | \
+ P  S  Z
+/ \/ \/ \
+
+Note that this is possible because when the middle of the original 4-node is moved up, the lower of the 4-node fits between the upper key (R) and the middle key (X), because S, X and Z were greater than R, while S is less than X. Z remains larger than all.
+
+To insert into a 3-node below a 3-node:
+- Add new key to lower 3-node to create temporary 4-node.
+- Move middle key in 4-node into parent.
+- Repeat up the tree, as necessary.
+- If you reach the root and it ends up being a 4-node, split the 4-node into three 2-nodes, so that a 4-node like this:
+
+A/B/C
+/| |\
+
+would turn into three 2-nodes:
+   
+   B
+  / \
+ A   C
+/ \ / \
+
+Note that the height increases by one -- the only time it does so for a 2-3-tree.
+
+Invariants: Maintains symmetric order and perfect balance.
+
+Every path from root to null link has the same length.
+
+Tree height:
+- Worst case: lg N (all 2-nodes)
+- Best case: log_3 N = 0.631 lg N (all 3-nodes)
+- Between 12 and 20 for a million nodes.
+- Between 18 and 30 for a billion nodes.
+
+Guaranteed logarithmic performance for search and insert.
+
+Practically speaking the implementation is complicated.
+
+## Red-Black trees
+
+- Represent 2-3 tree as a BST.
+- Use internal left-leaning links as "glue" for 3-nodes.
+
+- No node has two red links connected to it.
+- Every path from root to null link has the same number of black links.
+- Red links lean left.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
