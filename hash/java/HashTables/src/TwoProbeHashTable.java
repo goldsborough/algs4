@@ -1,3 +1,5 @@
+import java.util.NoSuchElementException;
+
 /**
  * Created by petergoldsborough on 08/28/15.
  */
@@ -18,11 +20,19 @@ public class TwoProbeHashTable<Key, Value> extends SeparateChainingHashTable<Key
 
 		table.put("five", 5);
 
+		table.put("six", 6);
+
 		System.out.println(table.size());
 		System.out.println(table.isEmpty());
 		System.out.println(table.get("one"));
 		table.erase("two");
 		System.out.println(table.size());
+
+		table.erase("one");
+		table.erase("three");
+		table.erase("four");
+
+		System.out.println(table.get("six"));
 	}
 
 	public void put(Key key, Value value)
@@ -49,7 +59,7 @@ public class TwoProbeHashTable<Key, Value> extends SeparateChainingHashTable<Key
 			}
 		}
 
-		int hash = (_sizes[first] < _sizes[second]) ? first : second;
+		int hash = (_sizes[first] > _sizes[second]) ? second : first;
 
 		_nodes[hash] = new Node(key, value, _nodes[hash]);
 
@@ -58,9 +68,80 @@ public class TwoProbeHashTable<Key, Value> extends SeparateChainingHashTable<Key
 		if (++_size == _capacity) _resize();
 	}
 
+	public Value get(Key key)
+	{
+		int first = _firstHash(key);
+
+		for (Node node = _nodes[first]; node != null; node = node.next)
+		{
+			if (node.key.equals(key)) return (Value) node.value;
+		}
+
+		int second = _secondHash(first);
+
+		for (Node node = _nodes[second]; node != null; node = node.next)
+		{
+			if (node.key.equals(key)) return (Value) node.value;
+		}
+
+		return null;
+	}
+
+	public void erase(Key key)
+	{
+		int first = _firstHash(key);
+
+		Node node = _nodes[first], previous = null;
+
+		for ( ; node != null; node = node.next)
+		{
+			if (node.key.equals(key))
+			{
+				if (previous != null)
+				{
+					previous.next = node.next;
+				}
+
+				node = null;
+
+				--_sizes[first];
+
+				if (--_size == _capacity/4) _resize();
+
+				return;
+			}
+		}
+
+		int second = _secondHash(first);
+
+		node = _nodes[second];
+		previous = null;
+
+		for ( ; node != null; node = node.next)
+		{
+			if (node.key.equals(key))
+			{
+				if (previous != null)
+				{
+					previous.next = node.next;
+				}
+
+				node = null;
+
+				--_sizes[second];
+
+				if (--_size == _capacity/4) _resize();
+
+				return;
+			}
+		}
+
+		throw new NoSuchElementException("No such element '" + key.toString() + "'!");
+	}
+
 	private int _firstHash(Key key)
 	{
-		return _hash(key);
+		return super._hash(key);
 	}
 
 	private int _secondHash(int first)
@@ -81,7 +162,6 @@ public class TwoProbeHashTable<Key, Value> extends SeparateChainingHashTable<Key
 			_sizes[i] = old[i];
 		}
 	}
-
 
 	private int[] _sizes = new int[MINIMUM_CAPACITY];
 }
