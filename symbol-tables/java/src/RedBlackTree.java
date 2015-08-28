@@ -22,7 +22,7 @@ import java.util.NoSuchElementException;
 - keys(): all the keys in the table (iterable)
  */
 
-public class BinarySearchTree<Key extends Comparable, Value> implements Iterable<BinarySearchTree<Key, Value>.Pair>
+public class RedBlackTree<Key extends Comparable, Value> implements Iterable<RedBlackTree<Key, Value>.Pair>
 {
 	public class Pair
 	{
@@ -44,6 +44,8 @@ public class BinarySearchTree<Key extends Comparable, Value> implements Iterable
 		map.put("A", 1);
 		map.put("Llama", 7);
 		map.put("A", 10);
+		map.put("Dan", 3);
+		map.put("C", 11);
 
 		for (BinarySearchTree<String, Integer>.Pair pair : map)
 		{
@@ -177,14 +179,20 @@ public class BinarySearchTree<Key extends Comparable, Value> implements Iterable
 	}
 
 
-	public Iterator<BinarySearchTree<Key,Value>.Pair> iterator()
+	public Iterator<RedBlackTree<Key,Value>.Pair> iterator()
 	{
 		return new Itr();
 	}
 
-	public Iterator<BinarySearchTree<Key,Value>.Pair> iterator(int lower, int upper)
+	public Iterator<RedBlackTree<Key,Value>.Pair> iterator(int lower, int upper)
 	{
 		return new Itr(lower, upper);
+	}
+
+	private enum Color
+	{
+		RED,
+		BLACK
 	}
 
 	private class Node implements Comparable<Key>
@@ -200,8 +208,19 @@ public class BinarySearchTree<Key extends Comparable, Value> implements Iterable
 			return key.compareTo(other);
 		}
 
+		public void resize()
+		{
+			size = 1;
+
+			if (left != null) size += left.size;
+
+			if (right != null) size += right.size;
+		}
+
 		Key key;
 		Value value;
+
+		Color color = Color.RED;
 
 		Node left = null;
 		Node right = null;
@@ -271,6 +290,61 @@ public class BinarySearchTree<Key extends Comparable, Value> implements Iterable
 		private Queue<Pair> queue = new Queue<>();
 	}
 
+	private boolean isRed(Node node)
+	{
+		return node != null && node.color == Color.RED;
+	}
+
+	private boolean isBlack(Node node)
+	{
+		return ! isRed(node);
+	}
+
+	private Node rotateLeft(Node node)
+	{
+		Node right = node.right;
+
+		assert isRed(right);
+
+		node.right = right.left;
+
+		right.left = node;
+
+		right.color = node.color;
+
+		node.color = Color.RED;
+
+		return right;
+	}
+
+	private Node rotateRight(Node node)
+	{
+		Node left = node.left;
+
+		assert isRed(left);
+
+		node.left = left.right;
+
+		left.right = node;
+
+		left.color = node.color;
+
+		node.color = Color.RED;
+
+		return left;
+	}
+
+	private void flipColors(Node node)
+	{
+		assert isBlack(node);
+		assert isRed(node.left);
+		assert isRed(node.right);
+
+		node.color = Color.RED;
+		node.right.color = Color.BLACK;
+		node.left.color = Color.BLACK;
+	}
+
 	private Node minimum(Node node)
 	{
 		if (node != null)
@@ -288,18 +362,29 @@ public class BinarySearchTree<Key extends Comparable, Value> implements Iterable
 		if (node.compareTo(key) < 0)
 		{
 			node.right = put(node.right, key, value);
-			node.size = 1 + node.right.size;
-			if (node.left != null) node.size += node.left.size;
+
+			node.resize();
 		}
 
 		else if (node.compareTo(key) > 0)
 		{
 			node.left = put(node.left, key, value);
-			node.size = 1 + node.left.size;
-			if (node.right != null) node.size += node.right.size;
+
+			node.resize();
 		}
 
 		else node.value = value;
+
+		return handleColors(node);
+	}
+
+	private Node handleColors(Node node)
+	{
+		if (isRed(node.right)) node = rotateLeft(node);
+
+		if (isRed(node.left) && isRed(node.left.left)) node = rotateRight(node);
+
+		if (isRed(node.left) && isRed(node.right)) flipColors(node);
 
 		return node;
 	}
@@ -323,18 +408,14 @@ public class BinarySearchTree<Key extends Comparable, Value> implements Iterable
 		{
 			node.left = delete(node.left, key);
 
-			node.size = 1;
-			if (node.left != null) node.size += node.left.size;
-			if (node.right != null) node.size += node.right.size;
+			node.resize();
 		}
 
 		else if (node.compareTo(key) < 0)
 		{
 			node.right = delete(node.right, key);
 
-			node.size = 1;
-			if (node.left != null) node.size += node.left.size;
-			if (node.right != null) node.size += node.right.size;
+			node.resize();
 		}
 
 		else

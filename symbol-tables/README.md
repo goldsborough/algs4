@@ -233,10 +233,46 @@ Practically speaking the implementation is complicated.
 
 - No node has two red links connected to it.
 - Every path from root to null link has the same number of black links.
+  + The reason why is that the red links are just "proxy-links" to simplify
+  	the 2-3 tree structure. In a 2-3 tree, all paths from the root to null have the same length (the tree is balanced). A red-black tree is not directly balanced like that because the 3-nodes are split up into two 2-nodes, so the red-black tree could be higher. However, if you don't count the red paths (because they would be part of the same node in a 2-3 tree, and we're modelling/simplifying that), the distance from root to null is always the same, i.e. every node on one level has the same number of *black links*. Therefere there is *black balance*: every path from root to null has the same number of black links (don't count the red ones!).
 - Red links lean left.
 
+Sometimes we need to rotate a right-leaning link to lean left:
+
+    E
+   / \ (RED)
+(< E) \
+       S
+      / \
+ (E < S) (< S)
+
+ So we set:
+
+ - E.right to S.left
+ - S.left to E
+ - S' color to E's color (BLACK)
+ - E's color to RED
+      
+       S
+      / \
+     E   (< S)
+(R) /  \
+ (< E) (E < S)
 
 
+Invariant: 
+- Perfect black balance.
+- Maintains symmetric order.
+
+Color Flip: re-color to split a (temporary) 4-node.
+
+Proposition: Height of tree is <= 2 lg N in the worst case.
+
+Proof: 
+- Every path from root to null link has the same number of *black links*.
+- Never two red links in-a-row (we'd rotate then).
+- Best case: only black: lg(N)
+- Worst case: one red for every black: 2 * lg(N)
 
 
 

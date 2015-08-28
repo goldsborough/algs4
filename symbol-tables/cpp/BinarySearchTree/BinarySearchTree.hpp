@@ -141,42 +141,44 @@ private:
 				node->resize();
 			}
 			
-			else
-			{
-				if (node == _begin)
-				{
-					if (node->right) _begin = node->right;
-					
-					else _begin = _begin->parent;
-				}
-				
-				if (! node->left) return node->right;
-				
-				if (! node->right || node->right == _end) return node->left;
-				
-				Node* successor = node->right;
-				
-				while(successor->left)
-				{
-					successor->size--;
-					successor = successor->left;
-				}
-				
-				successor->parent->left = successor->right;
-				
-				successor->right = node->right;
-				successor->left = node->left;
-				
-				node->right->parent = successor;
-				node->left->parent = successor;
-				
-				delete node;
-				
-				return successor;
-			}
+			else return _erase(node);
 		}
 		
 		return node;
+	}
+	
+	Node* _erase(Node* node)
+	{
+		if (node == _begin)
+		{
+			if (node->right) _begin = node->right;
+			
+			else _begin = _begin->parent;
+		}
+		
+		if (! node->left) return node->right;
+		
+		if (! node->right || node->right == _end) return node->left;
+		
+		Node* successor = node->right;
+		
+		while(successor->left)
+		{
+			successor->size--;
+			successor = successor->left;
+		}
+		
+		successor->parent->left = successor->right;
+		
+		successor->right = node->right;
+		successor->left = node->left;
+		
+		node->right->parent = successor;
+		node->left->parent = successor;
+		
+		delete node;
+		
+		return successor;
 	}
 	
 	Node*& _find(Node*& node, const Key& key) const
