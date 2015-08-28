@@ -97,7 +97,7 @@ public class SeparateChainingHashTable<Key, Value>
 		return _size == 0;
 	}
 
-	private static class Node
+	protected static class Node
 	{
 		public Node(Object key, Object value, Node next)
 		{
@@ -112,12 +112,12 @@ public class SeparateChainingHashTable<Key, Value>
 		Node next = null;
 	}
 
-	private int _hash(Key key)
+	protected int _hash(Key key)
 	{
 		return (key.hashCode() & 0x7FFFFFFF) % _nodes.length;
 	}
 
-	private void _resize()
+	protected void _resize()
 	{
 		int capacity = _size * 2;
 
@@ -136,7 +136,7 @@ public class SeparateChainingHashTable<Key, Value>
 		old = null;
 	}
 
-	private void _move(Object[] source, Object[] destination, int bins)
+	protected void _move(Object[] source, Object[] destination, int bins)
 	{
 		int half = BIN_SIZE / 2;
 
@@ -159,9 +159,9 @@ public class SeparateChainingHashTable<Key, Value>
 		}
 	}
 
-	private int _size = 0;
+	protected int _size = 0;
 
-	private int _capacity = MINIMUM_CAPACITY * BIN_SIZE;
+	protected int _capacity = MINIMUM_CAPACITY * BIN_SIZE;
 
-	private Node[] _nodes = new Node[MINIMUM_CAPACITY];
+	protected Node[] _nodes = new Node[MINIMUM_CAPACITY];
 }
