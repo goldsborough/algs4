@@ -19,7 +19,7 @@ void print(Head&& head, Tail&&... tail)
 
 int main(int argc, const char* argv[])
 {
-	LinearProbingHashTable<std::string, std::size_t> table;
+	SeparateChainingHashTable<std::string, std::size_t> table;
 	
 	table["one"] = 1;
 	table["two"] = 2;

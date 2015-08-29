@@ -178,43 +178,40 @@ private:
 	
 	void _resize()
 	{
-		std::size_t bins = _bins * 2;
+		std::size_t new_bins = _bins * 2;
 		
-		if (bins < MINIMUM_CAPACITY) return;
+		if (new_bins < MINIMUM_CAPACITY) return;
 		
 		Node** old = _nodes;
 		
-		_nodes = new Node*[bins];
+		_nodes = new Node*[new_bins];
 		
-		_move(old, _nodes);
-		
-		_bins = bins;
-		
-		_threshold = bins * BIN_SIZE;
-	}
-	
-	void _move(Node** source, Node** destination)
-	{
-		const std::size_t half = BIN_SIZE/2;
+		for (std::size_t bin = 0; bin < new_bins; ++bin)
+		{
+			_nodes[bin] = nullptr;
+		}
 		
 		for (std::size_t bin = 0; bin < _bins; ++bin)
 		{
-			Node* node = source[bin];
-			Node* next = nullptr;
-			
-			for (std::size_t n = 0; node && n < half; )
+			for (Node* node = old[bin]; node; )
 			{
-				next = node->next;
+				std::size_t hash = _hash(node->key);
 				
-				if (++n == half) node->next = nullptr;
+				Node* next = node->next;
 				
-				node = node->next;
+				node->next = _nodes[hash];
+				
+				_nodes[hash] = node;
+				
+				node = next;
 			}
-			
-			destination[bin] = source[bin];
-			
-			destination[_bins + bin] = next;
 		}
+		
+		delete [] old;
+		
+		_bins = new_bins;
+		
+		_threshold = _bins * BIN_SIZE;
 	}
 	
 	Node** _nodes;
