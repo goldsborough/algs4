@@ -178,7 +178,7 @@ private:
 	
 	void _resize()
 	{
-		std::size_t new_bins = _bins * 2;
+		std::size_t new_bins = (_size / BIN_SIZE) * 2;
 		
 		if (new_bins < MINIMUM_CAPACITY) return;
 		
@@ -188,12 +188,25 @@ private:
 		
 		for (std::size_t bin = 0; bin < new_bins; ++bin)
 		{
-			_nodes[bin] = nullptr;
+			_nodes[bin] = bin < _bins ? old[bin] : nullptr;
 		}
 		
+		delete [] old;
+		
+		_bins = new_bins;
+		
+		_threshold = _bins * BIN_SIZE;
+		
+		_rehash();
+	}
+	
+	void _rehash()
+	{
 		for (std::size_t bin = 0; bin < _bins; ++bin)
 		{
-			for (Node* node = old[bin]; node; )
+			Node* previous = nullptr;
+			
+			for (Node* node = _nodes[bin]; node; )
 			{
 				std::size_t hash = _hash(node->key);
 				
@@ -203,15 +216,15 @@ private:
 				
 				_nodes[hash] = node;
 				
+				if (previous) previous->next = next;
+				
+				else if (bin != hash) _nodes[bin] = next;
+				
+				previous = node;
+				
 				node = next;
 			}
 		}
-		
-		delete [] old;
-		
-		_bins = new_bins;
-		
-		_threshold = _bins * BIN_SIZE;
 	}
 	
 	Node** _nodes;

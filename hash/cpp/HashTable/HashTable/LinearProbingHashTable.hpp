@@ -210,7 +210,7 @@ private:
 	
 	void _resize()
 	{
-		std::size_t new_capacity = 2 * _size;
+		std::size_t new_capacity = 2 * _alive;
 		
 		if (new_capacity < MINIMUM_CAPACITY) return;
 		
@@ -245,6 +245,7 @@ private:
 		_size = _alive;
 	}
 	
+
 	Pair** _pairs;
 	
 	std::size_t _size;

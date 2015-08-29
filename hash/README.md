@@ -37,7 +37,7 @@ For your hash-table, you would have an integer between 0 and M-1 where M is the 
 
 If you have signed integers, you have to use the absolute value of the integer.
 
-But even then, you should make it positive by masking it with 0x7FFFFFFF. This mask leaves all bits except for the sign bit the way they were before, but always unsets the sign bit so that the value is positive. You could also make it positive in the standard way, by doing x = ~x + 1 where x is the negative integer.
+But even then, you should make it positive by masking it with 0x7FFFFFFF. This mask leaves all bits except for the sign bit the way they were before, but always unsets the sign bit so that the value is positive.
 
 Expect two values in the same bin (same hash value) after ~ sqrt(pi * M / 2) tosses.
 
