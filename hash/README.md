@@ -15,13 +15,18 @@ Classic space-time tradeoff:
 - Neither unlimited space nor unlimited time.
 
 Idealistic goal:
-- Scramble the keys uniformly to produce a table idnex.
+- Scramble the keys uniformly to produce a table index.
 - Efficiently computable.
 - Each table index equally likely for each key (uniform probability).
 
 All Java classes inherit a method hashCode(), which returns a 32-bit integer.
 
-Default: Memory address of x.
+Such a method which returns only an integer is referred to as a *pre-hash* function. The hashing function itself then has to reduce the universe of all possible keys (e.g. 2^32 possible values for 32-bit integers) to the set of indices of your table:
+
+- Pre-hash: return 100,000
+- Hash: return 100,000 % M (the size of your hash table)
+
+Default: Memory address of x (also *id* in Python).
 
 For user-defined types, try to use all you data's bits. Generally create your value from base 32 numbers and use Horner's rule.
 
@@ -43,6 +48,17 @@ Expect two values in the same bin (same hash value) after ~ sqrt(pi * M / 2) tos
 
 Expect every bin has at least one value after ~ M ln M attempts.
 
+## Hash Functions
+
+- Division method: hash(k) = k mod M
+- Multiplication method: hash(k) = [(a * k) mod 2^w] >> (w - r)
+  + where a is any (random) integer (should be odd and not close to power of 2)
+  + w is the word size (the number of bits of the integer)
+  + r is the number of bits you want to return
+- Universal hashing: hash(k) = [(a * k + b) mod p] mod m
+  + a, b random
+  + p prime larger than number of bits
+
 ## Separate chaining
 
 Use an array of linked lists.
@@ -52,13 +68,19 @@ Use an array of linked lists.
 
 Proposition: Under a uniform hashing assumption, the probability that the number of keys in a list is within a constant factor of N / M is extremely close to 1. N is the number keys you want to insert, M is the size of the array. This says that the probability is very high that if N = M, there are N/M = 1 keys in each list (chain/bin).
 
-Proof: The distribution of list sizes obeys a binomial distribution.
+Proof: The distribution of list sizes obeys a binomial distribution, because
+- Every key is equally likely to be hashed to any slot of the table (uniformity)
+- Independent of any other/previous/future keys (independence); i.e. a key is just as likely to map to a slot if another key is already there, as if there wasn't already a key there.
 
 Considerations: given that the number of probes per search/insert is proportional to N/M:
 
 - If M is too large => too many empty chains (wasted space).
 - If M is too small => chains too long (linear search too expensive).
 - Typical choice: M ~ N/5 (5 elements per chain); (you would resize when N becomes > M * 5) => constant-time operations.
+
+N/M is denoted by alpha and is called the *load factor*.
+
+The complexity is ultimately O(1 + alpha)
 
 ## Linear probing
 

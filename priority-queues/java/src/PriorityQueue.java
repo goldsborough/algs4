@@ -142,3 +142,151 @@ public class PriorityQueue<Key extends Comparable<Key>>
 
 	private Key[] _keys = (Key[]) new Comparable[MINIMUM_CAPACITY];
 }
+
+class MinHeap<Key extends Comparable<Key>>
+{
+	public static void main(String[] args)
+	{
+		MinHeap<Integer> heap = new MinHeap<>();
+		
+		heap.insert(5);
+		heap.insert(2);
+		heap.insert(0);
+		heap.insert(10);
+		
+		System.out.println(heap.pop());
+		System.out.println(heap.pop());
+		System.out.println(heap.size());
+		System.out.println(heap.top());
+		System.out.println(heap.pop());
+		System.out.println(heap.pop());
+		System.out.println(heap.isEmpty());
+	}
+	
+	public void insert(Key key)
+	{
+		if (++size == keys.length) resize();
+		
+		keys[size] = key;
+		
+		swim(size);
+	}
+	
+	public Key top()
+	{
+		return keys[1];
+	}
+	
+	public Key pop()
+	{
+		Key key = keys[1];
+		
+		swap(1, size);
+		
+		if (--size == keys.length/4) resize();
+		
+		sink(1);
+		
+		return key;
+	}
+	
+	public int size()
+	{
+		return size;
+	}
+	
+	public boolean isEmpty()
+	{
+		return size == 0;
+	}
+	
+	private void swim(int index)
+	{
+		int parent = parent(index);
+		
+		while (less(index, parent))
+		{
+			swap(index, parent);
+			
+			index = parent;
+			
+			parent = parent(index);
+		}
+	}
+	
+	private void sink(int index)
+	{
+		while (index <= size)
+		{
+			int child;
+			
+			int left = left(index);
+			
+			if (left > size) break;
+			
+			int right = right(index);
+			
+			if (right > size || less(left, right)) child = left;
+			
+			else child = right;
+			
+			if (less(child, index)) swap(child, index);
+			
+			else break;
+			
+			index = child;
+		}
+	}
+	
+	private int parent(int index)
+	{
+		return index > 1 ? index/2 : 1;
+	}
+	
+	private int left(int index)
+	{
+		return index * 2;
+	}
+	
+	private int right(int index)
+	{
+		return index * 2 + 1;
+	}
+	
+	private void swap(int first, int second)
+	{
+		Key temp = keys[first];
+		
+		keys[first] = keys[second];
+		keys[second] = temp;
+	}
+	
+	private boolean less(int first, int second)
+	{
+		return keys[first].compareTo(keys[second]) < 0;
+	}
+	
+	private void resize()
+	{
+		int capacity = size * 2;
+		
+		if (capacity < MINIMUM_CAPACITY) return;
+		
+		Key[] old = keys;
+		
+		keys = (Key[]) new Comparable[capacity];
+		
+		for (int i = 0; i < size; ++i)
+		{
+			keys[i] = old[i];
+		}
+		
+		old = null;
+	}
+	
+	private static final int MINIMUM_CAPACITY = 8;
+	
+	Key[] keys = (Key[]) new Comparable[MINIMUM_CAPACITY];
+	
+	int size = 0;
+}
