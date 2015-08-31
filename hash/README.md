@@ -125,3 +125,83 @@ Balanced BSTs:
 
 - Stronger performance guarantee.
 - Support for ordered operations.
+
+## Table Doubling
+
+To grow a table of size m to m':
+
+- Allocate table of size m'
+- Build new hash h' (if m changes, h' must use a different value (matters if you don't use the division method for re-hashing))
+- rehash -> for each old value, rehash and insert into new table
+
+If we would make m' = m + 1, the complexity would be theta(1 + 2 + 3 + ... + n) = theta(N^2)
+
+We really want m' = 2m.
+
+If we do m' = 2m, then we'll have theta(1 + 2 + 4 + 8 + 16 ... + n). Every time we rebuild in linear time, but we're only doing it log n times (log n doublings to get from 1 to n), thus we speak of *amortized cost* (like with arrays). I.e., a hash table is amortized constant time for insertion/deletion/search.
+
+Amortization: an operation takes *T(n) amortized*, if k operations take <= k * T(n) time. The occasional spike in running time is diluted.
+
+Table doubling: k inserts take theta(k) time => theta(1) time amortized per insert.
+
+Same is true for deletions, but don't shrink to half when n/2 elements left (table half empty), but rather shrink when n/4 elements left (when we're 3/4 empty). Amortized time is then O(1) again.
+
+## String matching
+
+Given two strings s and t, does s occur as a substring of t?
+
+Obvious solution: go through t sequentially with moving substring of type len(s), check if at any time the current moving substring is equal to the substring you're looking at.
+
+any(s==t[i:i+len(s)] for i in range(len(t)-len(s))
+
+Running time: O(len(s) * (len(t) - len(s))) = O(|s| * |t|)
+
+Hash s, then just hash every substring you're looking at and see if the hash values are equal.
+
+## Rolling Hashes ADT
+
+r is a string, we just wanna append the next char
+
+r.append(c)
+
+also want pop_left/skip, remove the first character (leftmost) (the one we don't need anymore).
+
+r.__call__ (i.e. r()) will give you the hash value.
+
+Called Karp-Rabin string matching algorithm.
+
+# Compute the hash value of s (which we'll compare too)
+rs = new Rolling Hash
+rt = new Rolling Hash
+
+for c in s:
+	rs.append(c)
+for c in t[:len(s)]:
+		rt.append(c)
+if rs() == rt():
+	done
+for i in range(len(s), len(t))
+	rt.skip(t[i - len(s)])
+	rt.append(t[i])
+if rs() == rt():
+	# potentially things match
+	# so then do the check (linear/normal string comparison)
+	if equal:
+		found match
+	else:
+		# happens with probability <= 1/|s|
+
+O(|s| + |t| + #matches * |s|)
+
+Use division method h(k) = k mod m
+
+m must be a random prime!!! at least as big as |s| (>= length of s)
+
+treat string x as multidigit number, with base a = alphabet size (ascii 256)
+
+to append: u = [u * a + ord(c)] % p
+
+to skip: u = u - ord(c) * a^(|u| - 1)
+
+r = r * a + ord(c) mod m
+
