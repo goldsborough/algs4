@@ -39,7 +39,7 @@ Quicksort is not stable!
 
 Practical improvements:
 
-- Insertion sort for small subarrays of some size less than a cutoff size between 10 (<-) and 20 (improvement about 20%).
+- Insertion sort for small subarrays of some size less than a cutoff size between __10__ and 20 (improvement about 20%).
 - You could also just stop the recursive function calls for small subarrays and then do one insertion sort after exiting the first stack (before returning from the main function), then you only have one pass. Recommended.
 
 - Best choice of pivot item = median (which may be anywhere in the sequence).
@@ -71,7 +71,7 @@ Quicksort: Takes quadratic time unless partitioning stops on equal keys!
 Mistake: Put all items equal to the partitioning item on one side.
 Consequence: ~ 1/2 N^2 compares when all keys are equal.
 
-Recommended: Stop scans on items equal to the partiioning item.
+Recommended: Stop scans on items equal to the partitioning item.
 Consequence: ~ N lg N compares when all keys are equal.
 
 Desirable: Put all items equal to the partitioning item in place.
@@ -85,7 +85,7 @@ Desirable: Put all items equal to the partitioning item in place.
 
 Thereby can have quicksort move elements that are equal to the key into the middle, smaller values to the left and greater values to the right, like normal partitioning. Then, you only have to sort values between the beginning and the first equal value, and between the last equal value and the end.
 
-Sorting lower bound: If there are *n* distinct keys and the i-th one occurs x_i times, an compare-based asorting algorithm must use at least
+Sorting lower bound: If there are *n* distinct keys and the i-th one occurs x_i times, a compare-based sorting algorithm must use at least
 
 *lg(N!/(x_1! x_2! ... x_n!)) ~ -sum_{i=1}^{n} x_i lg(x_i/N)*
 

@@ -69,7 +69,7 @@ To change indices we do arithmetic.
 Properties:
 
 - Largest key is a[1], which is root of binary tree.
-- Parent of node at k is k/2 (integer-divide/floor)
+- Parent of node at k is k/2 (integer-divide/floor) except for root (no parent and k/2 would give 0 for index 1, which is false).
 - Children of node at *k* are at *2k* and *2k + 1*
 
 Scenario: Child's key becomes larger key than it's parent's key.
@@ -86,10 +86,10 @@ Insertion:
 - Then swim it up.
 - Cost: At most lg N + 1 compares
 
-Scenario: Parent's key becomes smaller than one or both of it's hildren's.
+Scenario: Parent's key becomes smaller than one or both of its children's.
 
 To eliminate the violation:
-- Exhange key in parent with key in larger of the two children.
+- Exchange key in parent with key in larger of the two children.
 - Repeat until heap oder restored.
 
 Called *sink* (as opposed to *swim*).

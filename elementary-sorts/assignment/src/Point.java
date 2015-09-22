@@ -1,21 +1,20 @@
-import java.util.Comparator;
-
 /**
  * Created by petergoldsborough on 08/18/15.
  */
 
+import java.util.Comparator;
+
 /*
 public class Point implements Comparable<Point> {
-   public final Comparator<Point> SLOPE_ORDER;        // compare points by slope to this point
+   public Point(int x, int y)                         // constructs the point (x, y)
 
-   public Point(int x, int y)                         // construct the point (x, y)
-
-   public   void draw()                               // draw this point
-   public   void drawTo(Point that)                   // draw the line segment from this point to that point
+   public   void draw()                               // draws this point
+   public   void drawTo(Point that)                   // draws the line segment from this point to that point
    public String toString()                           // string representation
 
-   public    int compareTo(Point that)                // is this point lexicographically smaller than that point?
-   public double slopeTo(Point that)                  // the slope between this point and that point
+   public               int compareTo(Point that)     // compare two points by y-coordinates, breaking ties by x-coordinates
+   public            double slopeTo(Point that)       // the slope between this point and that point
+   public Comparator<Point> slopeOrder()              // compare two points by slopes they make with this point
 }
  */
 
@@ -41,7 +40,7 @@ public class Point implements Comparable<Point>
 
 	public String toString()
 	{
-		return "(" + (int)x + ", " + (int)y + ")";
+		return "(" + x + ", " + y + ")";
 	}
 
 	public int compareTo(Point that)
@@ -72,7 +71,10 @@ public class Point implements Comparable<Point>
 		return dy / (to.x - this.x);
 	}
 
-	public final Comparator<Point> SLOPE_ORDER = new SlopeComparator();
+	public Comparator<Point> slopeOrder()
+	{
+		return new SlopeComparator();
+	}
 
 	private class SlopeComparator implements Comparator<Point>
 	{

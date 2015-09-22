@@ -2,6 +2,8 @@
  * Created by petergoldsborough on 08/16/15.
 */
 
+import edu.princeton.cs.algs4.StdRandom;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 

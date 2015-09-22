@@ -2,6 +2,9 @@
  * Created by petergoldsborough on 08/16/15.
  */
 
+import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.StdOut;
+
 public class Subset
 {
 	public static void main(String[] args)

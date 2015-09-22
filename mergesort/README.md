@@ -14,7 +14,7 @@ Need three indices:
 - j (right half)
 - k (current pointer in the destination array)
 
-Assertions: Statements to test axsumptions about your program.
+Assertions: Statements to test assumptions about your program.
 
 - Helps detect logic bugs.
 - Documents code.

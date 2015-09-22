@@ -3,9 +3,6 @@
 
 #include <iterator>
 
-
-#include <iostream>
-
 template<class Itr>
 class Heapsort
 {

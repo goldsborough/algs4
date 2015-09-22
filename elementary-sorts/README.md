@@ -50,8 +50,8 @@ def selection(seq):
 
 Invariants:
 
-- Entries to the left of the iterator are fixed and in ascending order.
-- No entry to the right of the iterator is smaller than any entry to the left of it.
+- Entries to the left of the iterator are fixed and in non-decreasing order.
+- No entry at and to the right of the iterator is smaller than any entry to the left of it.
 
 Proposition:
 
@@ -65,14 +65,14 @@ Proposition:
 
 - In iteration i, swap a[i] with each larger entry to its left.
 
-Insertion sort is the method one most often uses to sort a deck of cards. For every value in the sequence, one moves backward through the previous set of values and inserts the current value at the position of the first value that is greater, such that the current value is inserted at the position where the previous value is smaller and the next value is greater than or equal to the current value. In more detail, the algorithm utilizes an iterator i starting at the second position (i.e. index 1 for 0-indexed sequences). The value of iterator i shall be henceforth denoted by x. During each iteration, another iterator j traverses all values *before* the i, looking for the first value y that is smaller than the value x of the first iterator i. This means that iterator j iterates *while* y its value is *greater than or equal* to the value x of the first iterator i. As soon as a value for y is encountered that does not satisfy the above condition, i.e. that is smaller than x, iterator j stops. Now it is important to mention that while iterator j moves backwards, its values must be shifted forward, such that when j stops iterating all values after j are at one position further than they were at the start of the current iteration, this can be done by setting the value at index [j + 1] equal to the value at index [j] for every iteration of j. At last, once j hits a value smaller than x, the value at [j + 1] should hold the value of x. For this, x must be saved prior to the iteration of j as it will otherwise have been overriden by the value at [i - 1] when j + 1 = i.
+Insertion sort is the method one most often uses to sort a deck of cards. For every value in the sequence, one moves backward through the previous set of values and inserts the current value at the position of the first value that is greater, such that the current value is inserted at the position where the previous value is less than or equal and the next value is greater to the current value. In more detail, the algorithm utilizes an iterator i starting at the second position (i.e. index 1 for 0-indexed sequences). The value of iterator i shall be henceforth denoted by x. During each iteration, another iterator j traverses all values *before* the i, looking for the first value y that is less than or equal to the value x of the first iterator i. This means that iterator j iterates *while* y its value is *greater* to the value x of the first iterator i. As soon as a value for y is encountered that does not satisfy the above condition, i.e. that is smaller than or equal to x, iterator j stops. Now it is important to mention that while iterator j moves backwards, its values must be shifted forward, such that when j stops iterating all values after j are at one position further than they were at the start of the current iteration, this can be done by setting the value at index [j + 1] equal to the value at index [j] for every iteration of j. At last, once j hits a value smaller than x, the value at [j + 1] should hold the value of x. For this, x must be saved prior to the iteration of j as it will otherwise have been overriden by the value at [i - 1] when j + 1 = i.
 
 ```python
 def insertion(seq):
 	for i in range(1, len(seq)):
 		value = seq[i]
 		j = i - 1
-		while j >= 0 and seq[j] >= value:
+		while j >= 0 and seq[j] > value:
 			seq[j+1] = seq[j]
 			j -= 1
 		seq[j + 1] = value
@@ -81,20 +81,20 @@ def insertion(seq):
 
 Invariants:
 
-- Entries to the left of the index are in ascending order.
+- Entries to the left of the index are in non-decreasing order.
 - Entries to the right have not been looked yet.
 
 Complexity:
 
-To sort a randomly-ordered array with distinct keys, isnertion sort uses ~ 1/4 N^2 compares and ~1/4 N^2 exchanges on average.
+To sort a randomly-ordered array with distinct keys, isnertion sort uses __~ 1/4 N^2__ compares and __~1/4 N^2__ exchanges on average (selection sort: __1/2 N^2__).
 
 Insertion sort does depend on the order of the sequence (unlike selection sort).
 
 Best case: if the array is in non-decreasing order (correct), insertion sort makes N - 1 compares and 0 exchanges.
 
-Worst case: If the array is in descending order with no duplicates, insertion sort makes ~ 1/2 N^2 compares and ~1/2 N^2 exchanges. This is worse than selection sort in the worst case because it must do more exchanges (selection sort always does one exchange per iteration and thus a linear number of exchanges in total).
+Worst case: If the array is in descending order with no duplicates, insertion sort makes ~ 1/2 N^2 compares and ~1/2 N^2 exchanges. This is worse than selection sort in the worst case __because it must do more exchanges__ (selection sort always does one exchange per iteration and thus a linear number of exchanges in total).
 
-Definition: An inversion is a pair of keys tha tare out of order. 
+Definition: An inversion is a pair of keys that are out of order. 
 
 In a reversed sequence of values, each key is out of order with the next.
 
@@ -104,7 +104,7 @@ Definition: An array is *partially sorted* if the number of inversions is linear
 
 Proposition: For partially-sorted arrays, insertion sort runs in linear time.
 
-Proof: Number of exhcanges equals the number of inversions.
+Proof: Number of exchanges equals the number of inversions.
 
 ## Shell sort
 
@@ -115,7 +115,7 @@ How to h-sort an array? Insertion sort but moving back *h* indices.
 - big increments -> small subarray
 - small increments -> already in order
 
-Shell-sort addresses the fact that for insertion sort, the iterator may need to travel back very many steps in the sequence. It does so by sorting in multiple steps, and with a different *h*-value each time. The value of *h* is the increment used for going back -- the *stride*. For insertion sort, the *h*-value is always 1, but for shell sort initially, this value is large. During each step, shell sort will act like insertion sort, but going back in steps of h and thus transporting values further distances each time, achieving the same thing insertion sort with less granularity but with greater efficiency. For example, to transport a value from the end of a sequence of *N* integers to its front, insertion sort would take *N* steps. However, shell sort would have a greater *h* value such as *N/3* and thus travel the same distance in only three steps. After each stage, the *h*-value is made smaller so that the shell-sorting operation is performed with more granularity, i.e. for smaller increments the values will be transported closer to their final position in the sorted sequence, while at the same time they won't have to travel as far as in insertion sort, because the greater grain of the prevoius *h-value* brought them closer to the real position. The increment value of *h* is an ongoing topic of research, but a popular increment sequence is one by Donald Knuth: 3x + 1. This means that for the first stage of sorting, one would look for the greatest value in the sequence by setting h equal to h * 3 + 1 while h is still less than N/3, where N is the length of the sequence. Then, after sorting with this h-value, h is brought back to the finer, smaller increment value by floor-/integer-dividing h by 3. Other increment sequences exist, with different degrees of efficiency. Note that shell sort is only an adaption of insertion sort to make it more efficient, the core idea is the same.
+Shell-sort addresses the fact that for insertion sort, the iterator may need to travel back very many steps in the sequence. It does so by sorting in multiple steps, and with a different *h*-value each time. The value of *h* is the increment used for going back -- the *stride*. For insertion sort, the *h*-value is always 1, but for shell sort initially, this value is large. During each step, shell sort will act like insertion sort, but going back in steps of h and thus transporting values further distances, achieving the same thing insertion sort with less granularity but with greater efficiency. For example, to transport a value from the end of a sequence of *N* integers to its front, insertion sort would take *N* steps. However, shell sort would have a greater *h* value such as *N/3* and thus travel the same distance in only three steps. After each stage, the *h*-value is made smaller so that the shell-sorting operation is performed with more granularity, i.e. for smaller increments the values will be transported closer to their final position in the sorted sequence, while at the same time they won't have to travel as far as in insertion sort, because the greater grain of the previous *h-value* brought them closer to the real position. The increment value of *h* is an ongoing topic of research, but a popular increment sequence is one by Donald Knuth: 3x + 1. This means that for the first stage of sorting, one would look for the greatest value in the sequence by setting h equal to h * 3 + 1 while h is still less than N/3, where N is the length of the sequence. Then, after sorting with this h-value, h is brought back to the finer, smaller increment value by floor/integer-dividing h by 3. Other increment sequences exist, with different degrees of efficiency. Note that shell sort is only an adaption of insertion sort to make it more efficient, the core idea is the same.
 
 ```python
 def shell(seq):
@@ -126,7 +126,7 @@ def shell(seq):
 		for i in range(h, len(seq), h):
 			value = seq[i]
 			j = i - h
-			while j >= 0 and seq[j] >= value:
+			while j >= 0 and seq[j] > value:
 				seq[j + h] = seq[j]
 				j -= h
 			seq[j + h] = value
