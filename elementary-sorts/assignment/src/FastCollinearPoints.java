@@ -6,7 +6,9 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.NoSuchElementException;
 
 /*
@@ -15,14 +17,20 @@ public class FastCollinearPoints {
    public           int numberOfSegments()        // the number of line segments
    public LineSegment[] segments()                // the line segments
 }
-
  */
 
 public class FastCollinearPoints
 {
-	public FastCollinearPoints(Point[] points)
+	public FastCollinearPoints(Point[] source)
 	{
-		if (points == null) throw new java.lang.NullPointerException();
+		if (source == null) throw new java.lang.NullPointerException();
+
+		Point[] points = new Point[source.length];
+
+		for (int i = 0; i < points.length; ++i)
+		{
+			points[i] = source[i];
+		}
 
 		check(points);
 
@@ -36,7 +44,14 @@ public class FastCollinearPoints
 
 	public LineSegment[] segments()
 	{
-		return segments;
+		LineSegment[] copy = new LineSegment[segments.length];
+
+		for (int i = 0; i < segments.length; ++i)
+		{
+			copy[i] = segments[i];
+		}
+
+		return copy;
 	}
 
 	public static void main(String[] args)
@@ -66,6 +81,8 @@ public class FastCollinearPoints
 
 		FastCollinearPoints brute = new FastCollinearPoints(points);
 
+		StdOut.println(brute.numberOfSegments());
+
 
 		for (LineSegment segment : brute.segments())
 		{
@@ -77,6 +94,8 @@ public class FastCollinearPoints
 	private void find(Point[] points)
 	{
 		Queue<LineSegment> queue = new Queue<>();
+
+		HashMap<Double, ArrayList<Point>> slopes = new HashMap<>();
 
 		for (int p = 0; p < points.length; ++p)
 		{
@@ -90,41 +109,39 @@ public class FastCollinearPoints
 			{
 				double slope = source.slopeTo(points[q]);
 
-				swap(points, p + 1, q);
+				int smallest = p;
+				int largest = p;
+				int count = 0;
 
-				int i = q + 1;
-
-				int count = 1;
-
-				for ( ; i < points.length && source.slopeTo(points[i]) == slope; ++i)
+				for ( ; q < points.length && source.slopeTo(points[q]) == slope; ++q)
 				{
-					swap(points, p + count + 1, i);
+					if (points[q].compareTo(points[smallest]) < 0) smallest = q;
+
+					else if (points[q].compareTo(points[largest]) > 0) largest = q;
 
 					++count;
 				}
 
 				if (count >= 3)
 				{
-					boolean seen = false;
-
-					for (int j = 0; j < p; ++j)
+					if (! alreadySeen(slopes, source, slope))
 					{
-						if (points[j].slopeTo(source) == slope)
+						LineSegment segment = new LineSegment(points[smallest], points[largest]);
+
+						queue.enqueue(segment);
+
+						ArrayList<Point> slopePoints = slopes.get(slope);
+
+						if (slopePoints == null)
 						{
-							seen = true;
-							break;
+							slopePoints = new ArrayList<>();
+
+							slopes.put(slope, slopePoints);
 						}
-					}
 
-					if (! seen)
-					{
-						Arrays.sort(points, p, p + count + 1);
-
-						queue.enqueue(new LineSegment(points[p], points[p + count]));
+						slopePoints.add(source);
 					}
 				}
-
-				q = i;
 			}
 		}
 
@@ -136,11 +153,18 @@ public class FastCollinearPoints
 		}
 	}
 
-	private static void swap(Point[] points, int i, int j)
+	private static boolean alreadySeen(HashMap<Double, ArrayList<Point>> slopes, Point p, double slope)
 	{
-		Point temp = points[i];
-		points[i] = points[j];
-		points[j] = temp;
+		ArrayList<Point> previous = slopes.get(slope);
+
+		if (previous == null) return false;
+
+		for (Point q : previous)
+		{
+			if (p.slopeTo(q) == slope) return true;
+		}
+
+		return false;
 	}
 
 	private void check(Point[] points)

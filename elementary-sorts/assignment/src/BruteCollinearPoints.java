@@ -6,7 +6,6 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
 
-import javax.sound.sampled.Line;
 import java.util.NoSuchElementException;
 
 /*
@@ -19,9 +18,16 @@ public class BruteCollinearPoints {
 
 public class BruteCollinearPoints
 {
-	public BruteCollinearPoints(Point[] points)
+	public BruteCollinearPoints(Point[] source)
 	{
-		if (points == null) throw new java.lang.NullPointerException();
+		if (source == null) throw new java.lang.NullPointerException();
+
+		Point[] points = new Point[source.length];
+
+		for (int i = 0; i < points.length; ++i)
+		{
+			points[i] = source[i];
+		}
 
 		check(points);
 
@@ -35,7 +41,14 @@ public class BruteCollinearPoints
 
 	public LineSegment[] segments()
 	{
-		return segments;
+		LineSegment[] copy = new LineSegment[segments.length];
+
+		for (int i = 0; i < segments.length; ++i)
+		{
+			copy[i] = segments[i];
+		}
+
+		return copy;
 	}
 
 	public static void main(String[] args)
@@ -65,6 +78,15 @@ public class BruteCollinearPoints
 
 		BruteCollinearPoints brute = new BruteCollinearPoints(points);
 
+		LineSegment[] s = brute.segments();
+
+		s[0] = new LineSegment(new Point(0, 0), new Point(10, 10));
+
+		LineSegment[] t = brute.segments();
+
+		boolean equals = s[0] == t[0];
+
+		System.out.println(equals);
 
 		for (LineSegment segment : brute.segments())
 		{
@@ -102,8 +124,6 @@ public class BruteCollinearPoints
 	{
 		Stack<LineSegment> stack = new Stack<>();
 
-		Point[] sorted = new Point[4];
-
 		for (int i = 0; i < points.length; ++i)
 		{
 			Point source = points[i];
@@ -114,19 +134,13 @@ public class BruteCollinearPoints
 				{
 					for (int l = k + 1; l < points.length; ++l)
 					{
-
 						double slopeJ = source.slopeTo(points[j]);
 						double slopeK = source.slopeTo(points[k]);
 						double slopeL = source.slopeTo(points[l]);
 
 						if (slopeJ == slopeK && slopeK == slopeL)
 						{
-							sorted[0] = points[i];
-							sorted[1] = points[j];
-							sorted[2] = points[k];
-							sorted[3] = points[l];
-
-							sort(sorted);
+							Point[] sorted = getSorted(points, i, j, k, l);
 
 							stack.push(new LineSegment(sorted[0], sorted[3]));
 						}
@@ -159,6 +173,20 @@ public class BruteCollinearPoints
 				throw new IllegalArgumentException();
 			}
 		}
+	}
+
+	private Point[] getSorted(Point[] points, int a, int b, int c, int d)
+	{
+		Point[] sorted = new Point[4];
+
+		sorted[0] = points[a];
+		sorted[1] = points[b];
+		sorted[2] = points[c];
+		sorted[3] = points[d];
+
+		sort(sorted);
+
+		return sorted;
 	}
 
 	private LineSegment[] segments;
