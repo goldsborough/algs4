@@ -48,6 +48,12 @@ Expect two values in the same bin (same hash value) after ~ sqrt(pi * M / 2) tos
 
 Expect every bin has at least one value after ~ M ln M attempts.
 
+## Caching
+
+If defining a hash function for your own user-defined type, consider caching the value, i.e. having it set to a null/invalid value upon-construction or keeping a boolean to indicate whether or not the method has already been called. Upon the first call of the method, compute the hash-code, store it and flip the "already-computed" flag if using a boolean. Upon subsequent calls, just return that value directly.
+
+Note that this is only valid for immutable types as else the object/key would change but not its hash value.
+
 ## Hash Functions
 
 - Division method: hash(k) = k mod M
@@ -58,6 +64,8 @@ Expect every bin has at least one value after ~ M ln M attempts.
 - Universal hashing: hash(k) = [(a * k + b) mod p] mod m
   + a, b random
   + p prime larger than number of bits
+
+The hash function we implement or use falls into the Uniform Hashing Assumption, i.e. we can assume that for all practical purposes the function will or should scramble/hash keys uniformly among the indices between 0 and M - 1.
 
 ## Separate chaining
 
