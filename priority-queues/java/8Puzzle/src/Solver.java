@@ -33,12 +33,10 @@ public class Solver
 		{
 			StdOut.println("Minimum number of moves = " + solver.moves());
 
-			/*
 			for (Board board : solver.solution())
 			{
 				StdOut.println(board);
 			}
-			*/
 		}
 	}
 
@@ -56,12 +54,12 @@ public class Solver
 
 	public int moves()
 	{
-		return moves;
+		return isSolvable ? moves : -1;
 	}
 
 	public Iterable<Board> solution()
 	{
-		return solution;
+		return isSolvable ? solution : null;
 	}
 
 	private static class Node implements Comparable<Node>
@@ -78,7 +76,7 @@ public class Solver
 		{
 			if (priority < other.priority) return -1;
 			if (priority > other.priority) return +1;
-			else                               return  0;
+			else                           return  0;
 		}
 
 		public final Board board;

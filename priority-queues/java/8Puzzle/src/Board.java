@@ -23,6 +23,8 @@ public class Board
 
 	public Board(int[][] blocks)
 	{
+		if (blocks == null) throw new java.lang.NullPointerException();
+
 		HashSet<Integer> set = new HashSet<>();
 
 		this.dimension = blocks.length;
@@ -51,7 +53,7 @@ public class Board
 
 	public int dimension()
 	{
-		return board.length;
+		return this.dimension;
 	}
 
 	public int hamming()
@@ -98,12 +100,14 @@ public class Board
 	{
 		Board other = new Board(this);
 
-		int first = 0, second = 3;
+		if (dimension == 1) return other;
 
-		// Don't swap with the blank block
-		if (board[first] == 0) second = 1;
+		// Don't swap with the blank block;
+		int first = 1, second = 2;
 
-		else if (board[first] == 0) second = 2;
+		if (board[first] == 0) first = 0;
+
+		else if (board[second] == 0) second = 3;
 
 		swap(other, first, second);
 
@@ -167,7 +171,7 @@ public class Board
 
 	public String toString()
 	{
-		String display = Integer.toString(board.length) + "\n";
+		String display = Integer.toString(dimension) + "\n";
 
 		for (int i = 0; i < board.length; )
 		{
@@ -175,7 +179,7 @@ public class Board
 
 			if (++i % dimension == 0) display += "\n";
 
-			else display += " ";
+			else display += "  ";
 		}
 
 		return display;
