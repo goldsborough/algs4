@@ -120,4 +120,60 @@ Complexity of the aforementioned representations:
 | Adj. list      | E + V |   O(1)   |      O(degree(V))      |            O(degree(V))		  |
 |----------------|-------|----------|------------------------|--------------------------------|
 
+## Depth-First Search
+
+Model graph as a maze:
++ Vertex = intersection.
++ Edge = passage.
+
+Goal: Explore every intersection in the maze.
+
+Trémaux maze exploration:
+
++ Unroll a ball of string behind you.
++ Mark each visited intersection and each visited passage.
++ Retrace steps when no unvisited options (go back to find other way).
+
+Algorithm:
+
+To visit vertex `v`
++ mark `v` as visited
++ Recursively visit all unmarked vertices `w` adjacent to `v`.
+
+Design Pattern for Graph Processing:
+
++ Decouple the graph data type from graph processing.
++ Create a `Graph` object.
++ Pass the `Graph` object to a graph-processsing routine.
++ Query the graph-processing routine for information.
+
+### Analysis
+
+Proposition: DFS marks all vertices connected to `s` in time proportional to the sum of their degrees.
+
+Proof:
+
++ If `w` is marked, then `w` is connected to `s`.
++ If `w` is connected to `s`, then `w` is marked.
++ Each vertex connected to `s` is visited once.
+
+## Breadth-First Search
+
++ Start with queue with only one element: the starting vertex.
++ Remove vertex `v` from queue.
++ Add to queue all unmarked vertices adjacent to `v` and mark them.
++ Repeat until queue is empty.
+
++ Can also very easily keep a `distance` data structure that records the distance of each visited vertex to the starting vertex. Because of the way breadth-first search is structured, the first time a target is hit, it is in the shortest path to it, i.e. if we keep the distance of each vertex to the start, it is equal to that distance + 1 for the last vertex connecting to the target.
+
+### Analysis
+
+Proposition: BFS computes the shorted paths (fewest number of edges) from `s` to all other vertices in a graph in time proportional to `E + V`.
+
+Proof: The Queue always consists of zero or more vertices of distance `k` to `s`, followed by zero or more vertices of distance `k + 1`.
+
+Note that DFS uses recursion, therefore a stack, while BFS uses a queue.
+
+
+
 

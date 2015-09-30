@@ -18,25 +18,38 @@ import java.lang.Math;
 
 public class Graph
 {
-	public Graph(int vertices)
+	public Graph(int numberOfVertices)
 	{
-		this.vertices = (Bag<Integer>[]) new Object[vertices];
+		this.vertices = (Bag<Integer>[]) new Bag[numberOfVertices];
+
+		for (int vertex = 0; vertex < numberOfVertices; ++vertex)
+		{
+			vertices[vertex] = new Bag<>();
+		}
 	}
 
 	public void addEdge(int first, int second)
 	{
+		assertIndex(first);
+		assertIndex(second);
+
 		vertices[first].add(second);
+		vertices[second].add(first);
 
 		++edges;
 	}
 
 	Iterable<Integer> adjacent(int vertex)
 	{
+		assertIndex(vertex);
+
 		return vertices[vertex];
 	}
 
 	public int degree(int vertex)
 	{
+		assertIndex(vertex);
+
 		return vertices[vertex].size();
 	}
 
@@ -80,6 +93,14 @@ public class Graph
 	public int numberOfVertices()
 	{
 		return vertices.length;
+	}
+
+	private void assertIndex(int vertex)
+	{
+		if (vertex < 0 || vertex > vertices.length)
+		{
+			throw new IllegalArgumentException("Vertex index out of range!");
+		}
 	}
 
 	private int edges = 0;

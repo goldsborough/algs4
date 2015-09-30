@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Graph.hpp"
+#include "GraphOperations.hpp"
 
 void print()
 {
@@ -17,17 +18,23 @@ void print(Head&& head, Tail&&... tail)
 
 int main(int argc, const char* argv[])
 {
-	Graph graph(4);
+	Graph graph(8);
 	
 	graph.add_edge(0, 2);
 	
-	graph.add_edge(0, 0);
+	graph.add_edge(2, 1);
 	
-	print(graph.number_of_edges(), " ", graph.number_of_vertices());
+	graph.add_edge(1, 3);
 	
-	for (const auto& v : graph.adjacent(0)) print(v);
+	graph.add_edge(0, 3);
 	
-	print(graph.max_degree(), " ", graph.degree(0), " ", graph.average_degree());
+	graph.add_edge(3, 2);
 	
-	print(graph.self_loops());
+	graph.add_edge(3, 7);
+	
+	auto path = GraphOperations::shortest_distance(graph, 0, 3);
+	
+	print(path);
+	
+
 }

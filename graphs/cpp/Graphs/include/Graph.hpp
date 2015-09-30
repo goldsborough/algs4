@@ -30,15 +30,6 @@ public:
 	const component_t& adjacent(vertex_t vertex) const;
 	
 	
-	size_t degree(vertex_t vertex) const;
-	
-	size_t max_degree() const;
-	
-	size_t average_degree() const;
-	
-	size_t self_loops() const;
-	
-	
 	size_t number_of_edges() const;
 	
 	size_t number_of_vertices() const;
