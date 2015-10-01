@@ -2,6 +2,7 @@
  * Created by petergoldsborough on 10/01/15.
  */
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.BitSet;
 
@@ -35,15 +36,21 @@ public class ConnectedComponents
 
 		BitSet visited = new BitSet(numberOfVertices);
 
-		count = 0;
+		this.components = new ArrayList<>();
 
-		ids = new int[numberOfVertices];
+		this.count = 0;
+
+		this.ids = new int[numberOfVertices];
 
 		for (int vertex = 0; vertex < numberOfVertices; ++vertex)
 		{
 			if (! visited.get(vertex))
 			{
-				dfs(graph, vertex, visited, count++);
+				ArrayList<Integer> component = new ArrayList<>();
+
+				dfs(graph, vertex, visited, component, count++);
+
+				components.add(component);
 			}
 		}
 	}
@@ -55,45 +62,12 @@ public class ConnectedComponents
 
 	public ArrayList<ArrayList<Integer>> allComponents()
 	{
-		ArrayList<ArrayList<Integer>> all = new ArrayList<>(count);
-
-		for (int id = 0; id < count; ++id)
-		{
-			all.add(component(id));
-		}
-
-		return all;
+		return this.components;
 	}
 
 	public ArrayList<Integer> component(int id)
 	{
-		ArrayList<Integer> vertices = new ArrayList<>();
-
-		for (int vertex = 0; vertex < ids.length; ++vertex)
-		{
-			if (ids[vertex] == id) vertices.add(vertex);
-		}
-
-		return vertices;
-	}
-
-	public ArrayList<Integer> singleComponentVertices()
-	{
-		ArrayList<Integer> members = new ArrayList<>();
-
-		BitSet added = new BitSet(count);
-
-		for (int vertex = 0; vertex < ids.length; ++vertex)
-		{
-			if (! added.get(ids[vertex]))
-			{
-				members.add(ids[vertex]);
-
-				if (added.isEmpty()) break;
-			}
-		}
-
-		return members;
+		return components.get(id);
 	}
 
 	public int count()
@@ -106,21 +80,29 @@ public class ConnectedComponents
 		return ids[vertex];
 	}
 
-	private void dfs(Graph graph, int vertex, BitSet visited, int id)
+	private void dfs(Graph graph,
+	                 int vertex,
+	                 BitSet visited,
+	                 ArrayList<Integer> component,
+	                 int id)
 	{
 		visited.set(vertex);
 
 		ids[vertex] = id;
 
+		component.add(vertex);
+
 		for (Graph.Adjacent adjacent : graph.adjacent(vertex))
 		{
 			if (! visited.get(adjacent.vertex))
 			{
-				dfs(graph, adjacent.vertex, visited, id);
+				dfs(graph, adjacent.vertex, visited, component, id);
 			}
 		}
 	}
 
 	private int count;
 	private int[] ids;
+
+	private ArrayList<ArrayList<Integer>> components;
 }

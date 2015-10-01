@@ -34,15 +34,9 @@ bool ConnectedComponents::connected(vertex_t first, vertex_t second) const
 }
 
 const std::vector<ConnectedComponents::component_t>&
-ConnectedComponents::all_components() const
+ConnectedComponents::components() const
 {
 	return _components;
-}
-
-const ConnectedComponents::component_t&
-ConnectedComponents::component(id_t id) const
-{
-	return _components[id];
 }
 
 ConnectedComponents::id_t ConnectedComponents::count() const

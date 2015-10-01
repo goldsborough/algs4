@@ -209,7 +209,7 @@ bool GraphOperations::is_bipartite(const Graph &graph,
 	
 	ConnectedComponents cc(graph);
 	
-	for (const auto& component : cc.all_components())
+	for (const auto& component : cc.components())
 	{
 		vertex_t vertex = component[0];
 		

@@ -75,7 +75,7 @@ public class GraphOperations
 
 		BitSet visited = new BitSet(graph.numberOfVertices());
 
-		for (Integer vertex: cc.singleComponentVertices())
+		for (Integer vertex: cc.allComponents())
 		{
 			boolean is = ! predicate.test(vertex);
 

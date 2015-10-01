@@ -8,21 +8,28 @@ class ConnectedComponents(object):
 	def __init__(self, graph):
 		self.count = 0
 		self.id = {}
+		self.components = self.process(graph)
+
+	def process(self, graph):
+		components = []
 		visited = set()
 		for vertex in graph:
 			if vertex not in visited:
-				self.dfs(graph, vertex, visited, self.count)
+				component = []
+				self.dfs(graph, vertex, visited, component, self.count)
 				self.count += 1
+				components.append(component)
 
 	def connected(self, first, second):
 		return self.id[first] == self.id[second]
 
-	def dfs(self, graph, vertex, visited, count):
+	def dfs(self, graph, vertex, visited, component, count):
 		visited.add(vertex)
 		self.id[vertex] = count
+		component.append(vertex)
 		for adjacent in graph.adjacent(vertex):
-			if adjacent not in visited:
-				self.dfs(graph, adjacent, visited, count)
+			if adjacent.vertex not in visited:
+				self.dfs(graph, adjacent.vertex, visited, component, count)
 
 def main():
 	graph = Graph(10)

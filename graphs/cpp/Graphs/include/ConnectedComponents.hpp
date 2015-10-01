@@ -30,9 +30,7 @@ public:
 	bool connected(vertex_t first, vertex_t second) const;
 	
 	
-	const std::vector<component_t>& all_components() const;
-	
-	const component_t& component(id_t id) const;
+	const std::vector<component_t>& components() const;
 	
 	
 	id_t count() const;
