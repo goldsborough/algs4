@@ -112,13 +112,11 @@ Graph representation:
 
 Complexity of the aforementioned representations:
 
-|----------------|-------|----------|------------------------|--------------------------------|
 | Representation | Space | add edge | are v and w connected? | iterate over adjacent vertices |
 |----------------|-------|----------|------------------------|--------------------------------|
 | List of edges  |   E   |   O(1)   |         O(E)           |               O(E)		      |
 | Adj. matrix    |  V^2  |   O(1)   |         O(1)		     |               O(V)             |
 | Adj. list      | E + V |   O(1)   |      O(degree(V))      |            O(degree(V))		  |
-|----------------|-------|----------|------------------------|--------------------------------|
 
 ## Depth-First Search
 

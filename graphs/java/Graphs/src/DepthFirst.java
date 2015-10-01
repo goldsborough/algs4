@@ -35,9 +35,9 @@ public class DepthFirst
 
 		visited.set(current);
 
-		for (int vertex : graph.adjacent(current))
+		for (Graph.Edge adjacent : graph.adjacent(current))
 		{
-			if (connected(graph, vertex, visited, target)) return true;
+			if (connected(graph, adjacent.vertex, visited, target)) return true;
 		}
 
 		return false;

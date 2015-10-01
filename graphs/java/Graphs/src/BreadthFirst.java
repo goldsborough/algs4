@@ -22,13 +22,13 @@ public class BreadthFirst
 
 			if (vertex == target) return true;
 
-			for (int adjacent : graph.adjacent(vertex))
+			for (Graph.Edge adjacent : graph.adjacent(vertex))
 			{
-				if (! visited.get(adjacent))
+				if (! visited.get(adjacent.vertex))
 				{
-					queue.add(adjacent);
+					queue.add(adjacent.vertex);
 
-					visited.set(adjacent);
+					visited.set(adjacent.vertex);
 				}
 			}
 		}
@@ -69,13 +69,13 @@ public class BreadthFirst
 
 			if (vertex == target) break;
 
-			for (int adjacent : graph.adjacent(vertex))
+			for (Graph.Edge adjacent : graph.adjacent(vertex))
 			{
-				if (! visited.get(adjacent))
+				if (! visited.get(adjacent.vertex))
 				{
-					queue.add(adjacent);
+					queue.add(adjacent.vertex);
 
-					visited.set(adjacent);
+					visited.set(adjacent.vertex);
 				}
 			}
 
@@ -122,15 +122,15 @@ public class BreadthFirst
 
 			if (vertex.equals(target)) break;
 
-			for (int adjacent : graph.adjacent(vertex))
+			for (Graph.Edge adjacent : graph.adjacent(vertex))
 			{
-				if (! visited.get(adjacent))
+				if (! visited.get(adjacent.vertex))
 				{
-					queue.add(adjacent);
+					queue.add(adjacent.vertex);
 
-					source.put(adjacent, vertex);
+					source.put(adjacent.vertex, vertex);
 
-					visited.set(adjacent);
+					visited.set(adjacent.vertex);
 				}
 			}
 		}

@@ -2,9 +2,8 @@
  * Created by petergoldsborough on 09/30/15.
  */
 
-import edu.princeton.cs.algs4.Bag;
+import java.util.ArrayList;
 
-import java.lang.Math;
 /*
 
 - `Graph(int V)`: create an empty graph with `V` vertices.
@@ -18,13 +17,39 @@ import java.lang.Math;
 
 public class Graph
 {
+	public static class Edge
+	{
+		public Edge(int vertex, int id)
+		{
+			this.vertex = vertex;
+			this.id = id;
+		}
+		
+		public int hashCode()
+		{
+			return vertex ^ id;
+		}
+		
+		public boolean equals(Object object)
+		{
+			if (! (object instanceof Edge)) return false;
+			
+			Edge other = (Edge) object;
+
+			return this.id == other.id;
+		}
+		
+		public final int vertex;
+		public final int id;
+	}
+	
 	public Graph(int numberOfVertices)
 	{
-		this.vertices = (Bag<Integer>[]) new Bag[numberOfVertices];
+		this.vertices = (ArrayList<Edge>[]) new ArrayList[numberOfVertices];
 
 		for (int vertex = 0; vertex < numberOfVertices; ++vertex)
 		{
-			vertices[vertex] = new Bag<>();
+			vertices[vertex] = new ArrayList<>();
 		}
 	}
 
@@ -33,57 +58,20 @@ public class Graph
 		assertIndex(first);
 		assertIndex(second);
 
-		vertices[first].add(second);
-		vertices[second].add(first);
+		vertices[first].add(new Edge(second, edges));
+		vertices[second].add(new Edge(first, edges));
 
 		++edges;
 	}
 
-	Iterable<Integer> adjacent(int vertex)
+	ArrayList<Edge> adjacent(int vertex)
 	{
 		assertIndex(vertex);
 
 		return vertices[vertex];
 	}
 
-	public int degree(int vertex)
-	{
-		assertIndex(vertex);
 
-		return vertices[vertex].size();
-	}
-
-	public int maxDegree()
-	{
-		int maximum = 0;
-
-		for (Bag<Integer> vertex : vertices)
-		{
-			maximum = java.lang.Math.max(maximum, vertex.size());
-		}
-
-		return maximum;
-	}
-
-	public double averageDegree()
-	{
-		return (2.0 * edges) / vertices.length;
-	}
-
-	public int selfLoops()
-	{
-		int loops = 0;
-
-		for (int vertex = 0; vertex < vertices.length; ++vertex)
-		{
-			for (int other : vertices[vertex])
-			{
-				if (other == vertex) ++loops;
-			}
-		}
-
-		return loops;
-	}
 
 	public int numberOfEdges()
 	{
@@ -105,6 +93,6 @@ public class Graph
 
 	private int edges = 0;
 
-	private Bag<Integer>[] vertices;
+	private ArrayList<Edge>[] vertices;
 
 }
