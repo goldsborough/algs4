@@ -182,6 +182,7 @@ Goal: Preprocess a graph to answer queries of the form "is `v` connected to `w`?
 
 Connected component API:
 
++ `ConnectedComponent(Graph graph)`: process graph.
 + `boolean connected(int v, int w)`: are `w` and `v` connected?
 + `int count()`: number of connected components
 + `int id(v)`: Component identifier for `v`?

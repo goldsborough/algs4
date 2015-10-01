@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "ConnectedComponents.hpp"
 #include "Graph.hpp"
 #include "GraphOperations.hpp"
 
@@ -18,23 +19,26 @@ void print(Head&& head, Tail&&... tail)
 
 int main(int argc, const char* argv[])
 {
-	Graph graph(8);
+	Graph graph(10);
 	
-	graph.add_edge(0, 2);
-	
-	graph.add_edge(2, 1);
-	
+	graph.add_edge(0, 1);
+	graph.add_edge(1, 2);
 	graph.add_edge(1, 3);
 	
-	graph.add_edge(0, 3);
+	graph.add_edge(4, 5);
+	graph.add_edge(4, 6);
+	graph.add_edge(4, 7);
 	
-	graph.add_edge(3, 2);
+	graph.add_edge(8, 9);
 	
-	graph.add_edge(3, 7);
+	ConnectedComponents cc(graph);
 	
-	auto path = GraphOperations::shortest_distance(graph, 0, 3);
+	print(std::boolalpha);
 	
-	print(path);
-	
+	print(cc.count());
+	print(cc.connected(0, 3));
+	print(cc.id(0), " ", cc.id(3));
+	print(cc.id(5));
+	print(cc.id(8));
 
 }

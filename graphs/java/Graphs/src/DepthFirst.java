@@ -2,12 +2,14 @@
  * Created by petergoldsborough on 09/30/15.
  */
 
+import java.util.BitSet;
+
 public class DepthFirst
 {
 
 	public static boolean connected(Graph graph, int start, int target)
 	{
-		boolean[] visited = new boolean[graph.numberOfVertices()];
+		BitSet visited = new BitSet(graph.numberOfVertices());
 
 		return connected(graph, start, visited, target);
 	}
@@ -25,13 +27,13 @@ public class DepthFirst
 		System.out.println(connected(graph, 0, 5));
 	}
 
-	private static boolean connected(Graph graph, int current, boolean[] visited, int target)
+	private static boolean connected(Graph graph, int current, BitSet visited, int target)
 	{
-		if (visited[current]) return false;
+		if (visited.get(current)) return false;
 
 		if (current == target) return true;
 
-		visited[current] = true;
+		visited.set(current);
 
 		for (int vertex : graph.adjacent(current))
 		{
