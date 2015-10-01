@@ -112,7 +112,7 @@ public class ConnectedComponents
 
 		ids[vertex] = id;
 
-		for (Graph.Edge adjacent : graph.adjacent(vertex))
+		for (Graph.Adjacent adjacent : graph.adjacent(vertex))
 		{
 			if (! visited.get(adjacent.vertex))
 			{

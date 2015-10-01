@@ -4,48 +4,37 @@
 
 import java.util.ArrayList;
 
-/*
-
-- `Graph(int V)`: create an empty graph with `V` vertices.
-- `Graph(File in)`: create graph from an input string.
-- `void addEdge(int v, int w)`: add an edge between `v` and `w`.
-- `Iterable<Integer> adjacent(int v)`: Get an iterator to all vertices adjacent to `v`.
-- `int numberOfEdges()`: The number of edges in the graph.
-- `int numberOfVertices()`: the number of vertices in the graph.
-
- */
-
 public class Graph
 {
-	public static class Edge
+	public static class Adjacent
 	{
-		public Edge(int vertex, int id)
+		public Adjacent(int vertex, int edge)
 		{
 			this.vertex = vertex;
-			this.id = id;
+			this.edge = edge;
 		}
 		
 		public int hashCode()
 		{
-			return vertex ^ id;
+			return vertex ^ edge;
 		}
 		
 		public boolean equals(Object object)
 		{
-			if (! (object instanceof Edge)) return false;
-			
-			Edge other = (Edge) object;
+			if (! (object instanceof Adjacent)) return false;
 
-			return this.id == other.id;
+			Adjacent other = (Adjacent) object;
+
+			return this.edge == other.edge;
 		}
 		
 		public final int vertex;
-		public final int id;
+		public final int edge;
 	}
 	
 	public Graph(int numberOfVertices)
 	{
-		this.vertices = (ArrayList<Edge>[]) new ArrayList[numberOfVertices];
+		this.vertices = (ArrayList<Adjacent>[]) new ArrayList[numberOfVertices];
 
 		for (int vertex = 0; vertex < numberOfVertices; ++vertex)
 		{
@@ -58,13 +47,13 @@ public class Graph
 		assertIndex(first);
 		assertIndex(second);
 
-		vertices[first].add(new Edge(second, edges));
-		vertices[second].add(new Edge(first, edges));
+		vertices[first].add(new Adjacent(second, edges));
+		vertices[second].add(new Adjacent(first, edges));
 
 		++edges;
 	}
 
-	ArrayList<Edge> adjacent(int vertex)
+	ArrayList<Adjacent> adjacent(int vertex)
 	{
 		assertIndex(vertex);
 
@@ -93,6 +82,6 @@ public class Graph
 
 	private int edges = 0;
 
-	private ArrayList<Edge>[] vertices;
+	private ArrayList<Adjacent>[] vertices;
 
 }

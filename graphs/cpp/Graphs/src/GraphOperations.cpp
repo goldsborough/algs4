@@ -1,4 +1,5 @@
 #include "GraphOperations.hpp"
+#include "ConnectedComponents.hpp"
 
 #include <queue>
 
@@ -12,9 +13,7 @@ GraphOperations::size_t GraphOperations::max_degree(const Graph& graph)
 {
 	size_t maximum = 0;
 	
-	for (std::size_t vertex = 0;
-		 vertex < graph.number_of_vertices();
-		 ++vertex)
+	for (vertex_t vertex = 0; vertex < graph.number_of_vertices(); ++vertex)
 	{
 		maximum = std::max(degree(graph, vertex), maximum);
 	}
@@ -31,15 +30,14 @@ GraphOperations::size_t GraphOperations::self_loops(const Graph& graph)
 {
 	size_t loops = 0;
 	
-	for (size_t vertex = 0;
-		 vertex < graph.number_of_vertices();
-		 ++vertex)
+	for (vertex_t vertex = 0; vertex < graph.number_of_vertices(); ++vertex)
 	{
-		auto& adjacent = graph.adjacent(vertex);
+		const auto& adjacent = graph.adjacent(vertex);
 		
-		loops += std::count(adjacent.begin(),
-							adjacent.end(),
-							vertex);
+		loops += std::count_if(adjacent.begin(),
+							   adjacent.end(),
+							   [&] (const edge_t& edge)
+							   { return edge.first == vertex; });
 	}
 	
 	return loops;
@@ -95,7 +93,10 @@ GraphOperations::size_t GraphOperations::shortest_distance(const Graph& graph,
 		
 		for (const auto& adjacent : graph.adjacent(vertex))
 		{
-			if (! visited[adjacent]) queue.push(adjacent);
+			if (! visited[adjacent.first])
+			{
+				queue.push(adjacent.first);
+			}
 		}
 		
 		if (vertex == last_on_level)
@@ -149,13 +150,13 @@ GraphOperations::component_t GraphOperations::shortest_path(const Graph& graph,
 		
 		for (const auto& adjacent : graph.adjacent(vertex))
 		{
-			if (! visited[adjacent])
+			if (! visited[adjacent.first])
 			{
-				queue.push(adjacent);
+				queue.push(adjacent.first);
 				
-				visited[adjacent] = true;
+				visited[adjacent.first] = true;
 				
-				source[adjacent] = vertex;
+				source[adjacent.first] = vertex;
 			}
 		}
 		
@@ -192,8 +193,120 @@ bool GraphOperations::_is_connected(const Graph &graph,
 	
 	for (const auto& adjacent : graph.adjacent(vertex))
 	{
-		if (_is_connected(graph, adjacent, target, visited)) return true;
+		if (_is_connected(graph, adjacent.first, target, visited))
+		{
+			return true;
+		}
 	}
 	
 	return false;
 }
+
+bool GraphOperations::is_bipartite(const Graph &graph,
+								   const std::function<bool(vertex_t)>& predicate)
+{
+	bitset_t visited(graph.number_of_edges(), false);
+	
+	ConnectedComponents cc(graph);
+	
+	for (const auto& component : cc.all_components())
+	{
+		vertex_t vertex = component[0];
+		
+		bool is = predicate(vertex);
+		
+		if (! _is_bipartite(graph, vertex, !is, predicate, visited))
+		{
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+bool GraphOperations::_is_bipartite(const Graph &graph,
+									vertex_t vertex,
+									bool was,
+									const std::function<bool(vertex_t)>& predicate,
+									bitset_t &visited)
+{
+	bool is = predicate(vertex);
+	
+	if (was == is) return false;
+	
+	for (const auto& adjacent : graph.adjacent(vertex))
+	{
+		if (! visited[adjacent.second])
+		{
+			visited[adjacent.second] = true;
+			
+			if (! _is_bipartite(graph, adjacent.first, is, predicate, visited))
+			{
+				return false;
+			}
+		}
+	}
+	
+	return true;
+}
+
+bool GraphOperations::euler_tour_possible(const Graph &graph)
+{
+	ConnectedComponents cc(graph);
+	
+	if (cc.count() > 1) return false;
+	
+	for (vertex_t vertex = 0; vertex < graph.number_of_vertices(); ++vertex)
+	{
+		if (degree(graph, vertex) % 2 != 0) return false;
+	}
+	
+	return true;
+}
+
+GraphOperations::component_t GraphOperations::euler_tour(const Graph &graph)
+{
+	component_t path;
+	
+	std::set<size_t> visited;
+	
+	if (_euler_tour(graph, 0, path, visited)) return path;
+	
+	throw std::invalid_argument("Euler tour not possible for this graph!");
+}
+
+bool GraphOperations::_euler_tour(const Graph &graph,
+								  vertex_t vertex,
+								  component_t& path,
+								  std::set<size_t>& visited)
+{
+	if (visited.size() == graph.number_of_edges())
+	{
+		path.push_back(vertex);
+		
+		return true;
+	}
+	
+	for (const auto& adjacent : graph.adjacent(vertex))
+	{
+		if (! visited.count(adjacent.second))
+		{
+			auto copy = visited;
+			
+			copy.insert(adjacent.second);
+			
+			if (_euler_tour(graph, adjacent.first, path, copy))
+			{
+				path.push_back(vertex);
+				
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+
+
+

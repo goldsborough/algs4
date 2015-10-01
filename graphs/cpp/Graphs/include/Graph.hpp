@@ -10,6 +10,7 @@
 #define GRAPH_HPP
 
 #include <vector>
+#include <utility>
 
 class Graph
 {
@@ -19,7 +20,9 @@ public:
 	
 	using vertex_t = std::size_t;
 	
-	using component_t = std::vector<vertex_t>;
+	using edge_t = std::pair<vertex_t, size_t>;
+	
+	using adjacent_t = std::vector<edge_t>;
 	
 	
 	Graph(vertex_t vertices);
@@ -27,7 +30,7 @@ public:
 	
 	void add_edge(vertex_t first, vertex_t second);
 	
-	const component_t& adjacent(vertex_t vertex) const;
+	const adjacent_t& adjacent(vertex_t vertex) const;
 	
 	
 	size_t number_of_edges() const;
@@ -36,7 +39,7 @@ public:
 	
 private:
 	
-	std::vector<component_t> _vertices;
+	std::vector<adjacent_t> _vertices;
 	
 	size_t _edges;
 };

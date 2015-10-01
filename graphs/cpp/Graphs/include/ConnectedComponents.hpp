@@ -21,14 +21,24 @@ public:
 	
 	using vertex_t = std::size_t;
 	
+	using component_t = std::vector<vertex_t>;
+	
 	
 	ConnectedComponents(const Graph& graph);
 	
+	
 	bool connected(vertex_t first, vertex_t second) const;
+	
+	
+	const std::vector<component_t>& all_components() const;
+	
+	const component_t& component(id_t id) const;
+	
 	
 	id_t count() const;
 	
 	id_t id(vertex_t vertex) const;
+	
 	
 	id_t operator[](vertex_t vertex);
 	
@@ -42,11 +52,14 @@ private:
 	void _dfs(const Graph& graph,
 			  vertex_t vertex,
 			  bitset_t& visited,
+			  component_t& component,
 			  id_t id);
 	
 	id_t _count;
 	
 	std::vector<id_t> _ids;
+	
+	std::vector<component_t> _components;
 };
 
 #endif /* CONNECTED_COMPONENTS_HPP */

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashSet;
+import java.util.Stack;
 import java.util.function.Predicate;
 
 /**
@@ -11,16 +12,16 @@ public class GraphOperations
 {
 	public static void main(String[] args)
 	{
-		Graph graph = new Graph(6);
+		Graph graph = new Graph(4);
 
-		graph.addEdge(0, 3);
-		graph.addEdge(3, 1);
-		graph.addEdge(1, 4);
-		graph.addEdge(4, 0);
+		graph.addEdge(0, 2);
+		graph.addEdge(2, 1);
+		graph.addEdge(1, 3);
+		graph.addEdge(3, 0);
+		graph.addEdge(0, 1);
 
-		graph.addEdge(2, 2);
 
-		System.out.println(isBipartite(graph, v -> v > 2));
+		System.out.println(isBipartite(graph, v -> v >= 2));
 
 	}
 
@@ -59,7 +60,7 @@ public class GraphOperations
 
 		for (int vertex = 0; vertex < graph.numberOfVertices(); ++vertex)
 		{
-			for (Graph.Edge adjacent : graph.adjacent(vertex))
+			for (Graph.Adjacent adjacent : graph.adjacent(vertex))
 			{
 				if (adjacent.vertex == vertex) ++loops;
 			}
@@ -74,12 +75,8 @@ public class GraphOperations
 
 		BitSet visited = new BitSet(graph.numberOfVertices());
 
-		for (ArrayList<Integer> vertices : cc.allComponents())
+		for (Integer vertex: cc.singleComponentVertices())
 		{
-			if (vertices.size() < 2) return false;
-
-			int vertex = vertices.get(0);
-
 			boolean is = ! predicate.test(vertex);
 
 			if (! isBipartite(graph, vertex, is, predicate, visited))
@@ -101,15 +98,13 @@ public class GraphOperations
 
 		if (was == is) return false;
 
-		visited.set(vertex);
-
-		for (Graph.Edge adjacent : graph.adjacent(vertex))
+		for (Graph.Adjacent adjacent : graph.adjacent(vertex))
 		{
-			if (! visited.get(adjacent.vertex))
+			if (! visited.get(adjacent.edge))
 			{
-				BitSet copy = (BitSet) visited.clone();
+				visited.set(adjacent.edge);
 
-				if (! isBipartite(graph, adjacent.vertex, is, predicate, copy))
+				if (! isBipartite(graph, adjacent.vertex, is, predicate, visited))
 				{
 					return false;
 				}
@@ -135,38 +130,44 @@ public class GraphOperations
 
 	public static Iterable<Integer> eulerTour(Graph graph)
 	{
-		ArrayList<Integer> path = new ArrayList<>();
+		Stack<Integer> path = new Stack<>();
 
-		HashSet<Integer> visited = new HashSet<>();
+		BitSet visited = new BitSet(graph.numberOfEdges());
 
-		return eulerTour(graph, 0, visited, path);
+		if (eulerTour(graph, 0, visited, path)) return path;
+
+		return null;
 	}
 
-	private static ArrayList<Integer> eulerTour(Graph graph,
+	private static boolean eulerTour(Graph graph,
 	                                 int vertex,
-	                                 HashSet<Integer> visited,
-	                                 ArrayList<Integer> path)
+	                                 BitSet visited,
+	                                 Stack<Integer> path)
 	{
-		path.add(vertex);
-
-		if (visited.size() == graph.numberOfEdges()) return path;
-
-		for (Graph.Edge adjacent : graph.adjacent(vertex))
+		if (visited.cardinality() == graph.numberOfEdges())
 		{
-			if (! visited.contains(adjacent.id))
+			path.push(vertex);
+
+			return true;
+		}
+
+		for (Graph.Adjacent adjacent : graph.adjacent(vertex))
+		{
+			if (! visited.get(adjacent.edge))
 			{
-				HashSet<Integer> visitedCopy = (HashSet<Integer>) visited.clone();
+				BitSet visitedCopy = (BitSet) visited.clone();
 
-				visitedCopy.add(adjacent.id);
+				visitedCopy.set(adjacent.edge);
 
-				ArrayList<Integer> pathCopy = (ArrayList<Integer>) path.clone();
+				if (eulerTour(graph, adjacent.vertex, visitedCopy, path))
+				{
+						path.push(vertex);
 
-				ArrayList<Integer> result = eulerTour(graph, adjacent.vertex, visitedCopy, pathCopy);
-
-				if (result != null) return result;
+						return true;
+				}
 			}
 		}
 
-		return null;
+		return false;
 	}
 }

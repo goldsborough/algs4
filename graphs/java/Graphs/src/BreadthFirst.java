@@ -22,7 +22,7 @@ public class BreadthFirst
 
 			if (vertex == target) return true;
 
-			for (Graph.Edge adjacent : graph.adjacent(vertex))
+			for (Graph.Adjacent adjacent : graph.adjacent(vertex))
 			{
 				if (! visited.get(adjacent.vertex))
 				{
@@ -69,7 +69,7 @@ public class BreadthFirst
 
 			if (vertex == target) break;
 
-			for (Graph.Edge adjacent : graph.adjacent(vertex))
+			for (Graph.Adjacent adjacent : graph.adjacent(vertex))
 			{
 				if (! visited.get(adjacent.vertex))
 				{
@@ -122,7 +122,7 @@ public class BreadthFirst
 
 			if (vertex.equals(target)) break;
 
-			for (Graph.Edge adjacent : graph.adjacent(vertex))
+			for (Graph.Adjacent adjacent : graph.adjacent(vertex))
 			{
 				if (! visited.get(adjacent.vertex))
 				{

@@ -17,13 +17,13 @@ Graph::Graph(vertex_t vertices)
 
 void Graph::add_edge(vertex_t first, vertex_t second)
 {
-	_vertices[first].push_back(second);
-	_vertices[second].push_back(first);
+	_vertices[first].push_back({second, _edges});
+	_vertices[second].push_back({first, _edges});
 	
 	++_edges;
 }
 
-const Graph::component_t& Graph::adjacent(vertex_t vertex) const
+const Graph::adjacent_t& Graph::adjacent(vertex_t vertex) const
 {
 	return _vertices[vertex];
 }
