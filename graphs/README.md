@@ -174,6 +174,41 @@ Proof: The Queue always consists of zero or more vertices of distance `k` to `s`
 
 Note that DFS uses recursion, therefore a stack, while BFS uses a queue.
 
+## Connected Components
 
+Definition: Vertices `v` and `w` are *connected* if there is a path between them.
+
+Goal: Preprocess a graph to answer queries of the form "is `v` connected to `w`?"
+
+Connected component API:
+
++ `boolean connected(int v, int w)`: are `w` and `v` connected?
++ `int count()`: number of connected components
++ `int id(v)`: Component identifier for `v`?
+
+The relation "is connected to" is an *equivalence relation*:
+
++ Reflexive: `v` is connected to `v`.
++ Symmetric: if `v` is connected to `w`, then `w` is connected to `v`.
++ Transitive: if `v` is connected to `w` and `w` is connected to `x`, then `v` is connected to `x`.
+
+Definition: A connected component is a maximal set of connected vertices.
+
+Idea: assign each connected component an ID, and each vertex the ID of the component in which it is connected. To see if two vertices are connected, check if their IDs are equal (like for dynamic-connectivity problems).
+
+## Graph challenges
+
+Problem: Is a graph bipartite?
+
+Bipartite: If the graph can be divided into two sets of vertices, such that every edge connects an edge from the one class to an edge of the other class.
+
+Problem: Euler Tour -> Is there a general cycle that uses each edge exactly once?
+Answer: Yes if connected and all vertices have *even* degree.
+
+Problem: Travelling Salesman -> Is there a cycle that visits every vertex exactly once? (NP-complete)
+
+Problem: Are two graphs identical except for vertex names? (Graph-isomorphism problem).
+
+Problem: Can you lay out the graph in the plane without crossing edges?
 
 
