@@ -75,8 +75,10 @@ public class GraphOperations
 
 		BitSet visited = new BitSet(graph.numberOfVertices());
 
-		for (Integer vertex: cc.allComponents())
+		for (ArrayList<Integer> component : cc.allComponents())
 		{
+			Integer vertex = component.get(0);
+
 			boolean is = ! predicate.test(vertex);
 
 			if (! isBipartite(graph, vertex, is, predicate, visited))
