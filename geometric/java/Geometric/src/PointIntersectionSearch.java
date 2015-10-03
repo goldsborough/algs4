@@ -4,7 +4,7 @@ import java.util.ArrayList;
  * Created by petergoldsborough on 10/03/15.
  */
 
-public class IntersectionSearch
+public class PointIntersectionSearch
 {
 	public static class Point implements Comparable<Point>
 	{
@@ -58,7 +58,7 @@ public class IntersectionSearch
 		lines.add(new Line(new Point(1, 0), new Point(1, 4)));
 		lines.add(new Line(new Point(4, 0), new Point(4, 3)));
 
-		for (Point point : IntersectionSearch.find(lines))
+		for (Point point : PointIntersectionSearch.find(lines))
 		{
 			System.out.printf("(%d, %d) ", point.x, point.y);
 		}
