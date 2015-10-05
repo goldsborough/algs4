@@ -140,7 +140,7 @@ Non-degeneracy assumption: No two interval have the same left endpoints.
 
 Each node in the binary search tree stores the interval and also the *maximum endpoint in its tree*. The latter is used to determine whether or not to go down a tree when searching.
 
-To search for an interval in the tree:
+To search for any __single__ intersecting interval in the tree (only one):
 + If the interval in the current node intersects the query interval, return that intersecting interval.
 + Else if the left subtree is null, go right.
 + Else if the left subtree's maximum right endpoint is less than the left query endpoint, go right (no interval will intersect the query in the left subtree).

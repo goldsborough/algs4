@@ -1,3 +1,4 @@
+import java.lang.Cloneable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.NoSuchElementException;
@@ -105,16 +106,11 @@ public class KdTree<Dimension extends Number & Comparable<Dimension>, Point exte
 		return size == 0;
 	}
 
-	private class Figure
+	private class Figure implements Cloneable
 	{
 		public Figure(Node root, Point point, Integer level)
 		{
-			if (root == null)
-			{
-				first = (Point) globalFigure.first.clone();
-				second = (Point) globalFigure.second.clone();
-				this.center = (Point) globalFigure.center.clone();
-			}
+			if (root == null) clone(globalFigure);
 
 			else
 			{
@@ -138,13 +134,7 @@ public class KdTree<Dimension extends Number & Comparable<Dimension>, Point exte
 					this.first.dimension(0, root.point.dimension(0));
 				}
 
-				else
-				{
-					this.first = (Point) point.clone();
-					this.second = (Point) root.figure.second.clone();
-
-					this.first.dimension(0, root.figure.first.dimension(0));
-				}
+				else clone(root.figure);
 
 				this.center = computeCenter();
 			}
@@ -155,6 +145,25 @@ public class KdTree<Dimension extends Number & Comparable<Dimension>, Point exte
 			this.first = first;
 			this.second = second;
 			this.center = computeCenter();
+		}
+
+		public Figure(Point first, Point second, Point center)
+		{
+			this.first = first;
+			this.second = second;
+			this.center = center;
+		}
+
+		public Figure clone()
+		{
+			return new Figure(this.first, this.second, this.center);
+		}
+
+		public void clone(Figure other)
+		{
+			this.first = other.first;
+			this.second = other.second;
+			this.center = other.center;
 		}
 
 		public boolean contains(Point point)
@@ -187,12 +196,12 @@ public class KdTree<Dimension extends Number & Comparable<Dimension>, Point exte
 			return point;
 		}
 
-		public final Point first;
-		public final Point second;
-		public final Point center;
+		public Point first;
+		public Point second;
+		public Point center;
 	}
 
-	private class Champion
+	private static class Champion
 	{
 		public Champion()
 		{
@@ -459,7 +468,7 @@ public class KdTree<Dimension extends Number & Comparable<Dimension>, Point exte
 			champion.distance = distance;
 		}
 
-		Pair<Node, Node> closer = determineCloser(node, point, level);
+		Pair<Node, Node> closer = determineCloser(node, point);
 
 		if (closerPointPossible(closer.first, point, champion))
 		{
@@ -473,7 +482,7 @@ public class KdTree<Dimension extends Number & Comparable<Dimension>, Point exte
 
 	}
 
-	private Pair<Node, Node> determineCloser(Node node, Point point, Integer level)
+	private Pair<Node, Node> determineCloser(Node node, Point)
 	{
 		if (node.left == null || node.right == null)
 		{
