@@ -35,7 +35,7 @@ Equality:
 
 You should test equality of fields that usually differ first.
 
-## Elemenatary Implementations:
+## Elementary Implementations:
 
 1. Sequential search in a linked list:
 	- Linked list of key-value pairs (nodes).
@@ -92,7 +92,7 @@ Cost is always lg(depth of node) + 1 = h (height).
 Tree is like a quicksort-partition: all elements on the left than the pivot are less, all to the right are greater.
 
 - Best case: the tree is perfectly balanced, such that a search is always logarithmic. E.g. for insertions 4, 2, 6, 1, 3, 5, 7 you get:
-     
+
      4
    /   \
   2     6
@@ -172,7 +172,7 @@ Insert into a 3-node at bottom:
 - Move middle key in 4-node into parent.
 
 To move Z into this tree (P is a 2-node, S/Z is a 3-node):
-  
+
    R
   / \
  P  S/X
@@ -204,7 +204,7 @@ A/B/C
 /| |\
 
 would turn into three 2-nodes:
-   
+
    B
   / \
  A   C
@@ -252,7 +252,7 @@ Sometimes we need to rotate a right-leaning link to lean left:
  - S.left to E
  - S' color to E's color (BLACK)
  - E's color to RED
-      
+
        S
       / \
      E   (< S)
@@ -260,7 +260,7 @@ Sometimes we need to rotate a right-leaning link to lean left:
  (< E) (E < S)
 
 
-Invariant: 
+Invariant:
 - Perfect black balance.
 - Maintains symmetric order.
 
@@ -268,26 +268,12 @@ Color Flip: re-color to split a (temporary) 4-node.
 
 Proposition: Height of tree is <= 2 lg N in the worst case.
 
-Proof: 
+Proof:
 - Every path from root to null link has the same number of *black links*.
 - Never two red links in-a-row (we'd rotate then).
 - Best case: only black: lg(N)
 - Worst case: one red for every black: 2 * lg(N)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+You can save memory by not storing the color information in a boolean, but rather either:
++ Keep a bitset with heap-like ordering of bits (i.e. bit 0 for root, children at 2k and 2k + 1, parents at k/2 for any level `k`)
++ Swap the left and right children. For a BST, it is expected that the left child is smaller and the right child is greater, if that is not the case it signifies a red link (have to retrieve the smaller node during traversal then; cost/time tradeoff)
