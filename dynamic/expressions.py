@@ -5,6 +5,7 @@ import re
 
 from collections import namedtuple
 
+
 def memoize(*indices):
 	def decorator(function):
 		cache = {}
@@ -16,6 +17,7 @@ def memoize(*indices):
 			return cache[key]
 		return proxy
 	return decorator
+
 
 def parse(expression):
 	pattern = re.compile(r'(\d+)\s*(\W)\s*(\d+)')
