@@ -101,3 +101,42 @@ def find_overlapping(array, first, last):
 This method is run on half-arrays at each level of recursion, thereby finding the maximum possible overlapping subarray and thus the maximum overall subarray.
 
 Now for the stocks, one would first compute the relative change or slope of the stocks over time, simply by iterating over two at a time and computing the difference between the stocks at a given day and the day before. For these changes, one then computes the maximum-subarray and thereby gets the range where the increase (the change) is greatest. The lower boundary is thus the buying-day, and the upper-boundary is the selling day. This is most profitable, because the stocks increased the most in price in this subarray.
+
+## Shorter, better solution
+
+```C+++
+template<typename Iterator>
+auto maximum_subarray(Iterator begin, Iterator end) -> decltype(*begin + *begin)
+{
+	using T = decltype(*begin + *begin);
+
+	T sum = 0;
+
+	T best = 0;
+
+	auto largest = end;
+
+	for ( ; begin != end; ++begin)
+	{
+		sum += *begin;
+
+		if (largest == end || *begin > *largest) largest = begin;
+
+		if (sum > best) best = sum;
+
+		else if (sum < 0) sum = 0;
+	}
+
+	// in std::max(largest, best) best (at least 0)
+	// would win if largest is negative
+	if (*largest < 0) return *largest;
+
+	return best;
+}
+```
+
+The thing is that it never makes sense to have the current sum become negative. When you add a negative value from the current sum and the sum becomes negative, you might as well reset, because any positive value will be greater than that. Given a sequence like so:
+
+`[2, -8, 3, -2, 4, 10]`
+
+when you add -8 to 2, you get -6. Think of it that 2 + (-8) *reduces* to -6, would you add the -6 *at the front* to your maximum subarray? No, so we can just ignore the sequence up to -8 and start our search at 3. However when do we do care about negative values? When they don't make the sum negative. For 3 - 2, the sum is not negative. Again, think of 3 - 2 reducing to 1. We do want to include the 1 at the start, because it's positive. So the important part is whether or not the sum becomes negative. If it does, we reset to 0. The algorithm above implements this (and adds error handling for when there are only negative values -- all the `largest` stuff).
