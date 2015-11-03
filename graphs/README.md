@@ -78,7 +78,7 @@ public static int maxDegree(Graph G)
 ```Java
 public static int averageDegree(Graph G)
 {
-	return (2.0 * G.E()) / G.V();	
+	return (2.0 * G.E()) / G.V();
 }
 ```
 
@@ -176,7 +176,7 @@ Note that DFS uses recursion, therefore a stack, while BFS uses a queue.
 
 Definition: Vertices `v` and `w` are *connected* if there is a path between them.
 
-Goal: Preprocess a graph to answer queries of the form "is `v` connected to `w`?"
+Goal: Preprocess a graph to answer queries of the form "is `v` connected to `w`?
 
 Connected component API:
 
@@ -209,5 +209,3 @@ Problem: Travelling Salesman -> Is there a cycle that visits every vertex exactl
 Problem: Are two graphs identical except for vertex names? (Graph-isomorphism problem).
 
 Problem: Can you lay out the graph in the plane without crossing edges?
-
-

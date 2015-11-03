@@ -1,4 +1,6 @@
-# Implementations
+# Dynamic Connectivity
+
+## Implementations
 
 Basic:
 
@@ -32,7 +34,7 @@ For *N* integer elements have an array of size *N* where each element (each *ID*
       |   |  
       1   7  
 
-  Here, 0, 8 and 9 are their own roots because they are not connected to any other elements. To see whether or not two elements are connected -- connected(p, q) -- you fetch their roots and compare them (either with while loop or recursively). 
+  Here, 0, 8 and 9 are their own roots because they are not connected to any other elements. To see whether or not two elements are connected -- connected(p, q) -- you fetch their roots and compare them (either with while loop or recursively).
 
   - find operation has linear complexity: O(N)
 
@@ -63,7 +65,7 @@ For *N* integer elements have an array of size *N* where each element (each *ID*
 
     Here, the depth of the tree stays the same and thus the performance of a root-find operation. Had the tree with root 4 been attached to the tree with root 5, the depth would have increased and thus the efficiency of finding the root would have decreased.
 
-    Further analysis shows here that the depth of the tree can be at most lg(N) -- where lg is the base-2 logarithm. The reason why is that when a tree T1 is merged with another tree T2, where the size s1 of tree T1 is less than the size s2 of tree T2, the size of T1 must double (if s1 = s2) or increase by a greater factor (if s2 > s1). For N elements, a tree with initial size 1 can only double lg(N) times. 
+    Further analysis shows here that the depth of the tree can be at most lg(N) -- where lg is the base-2 logarithm. The reason why is that when a tree T1 is merged with another tree T2, where the size s1 of tree T1 is less than the size s2 of tree T2, the size of T1 must double (if s1 = s2) or increase by a greater factor (if s2 > s1). For N elements, a tree with initial size 1 can only double lg(N) times.
 
     An example, starting out with N = 4:
 
@@ -125,5 +127,3 @@ For *N* integer elements have an array of size *N* where each element (each *ID*
   4. If not, figure out why
   5. Find a way to address the problem (improve algorithm)
   6. Iterate until satisfied.
-
-  

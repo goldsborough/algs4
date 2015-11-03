@@ -35,7 +35,7 @@ Binary Tree: Empty or node with links to left and right binary trees.
 Complete Tree: Perfectly balanced (no empty nodes on a level), except for bottom level.
 
 Property: Height of complete tree with *N* nodes is floor(lg N).
-Proof: Height only increass when N is a power of 2.
+Proof: Height only increases when N is a power of 2.
 
 Binary Heap: Array representation of a heap-ordered complete binary tree.
 
@@ -109,6 +109,8 @@ Make sure heap nodes are immutable (const/final).
 
 # Heapsort
 
+## Never forget that sorting can be done by counting
+
 Plan:
 1. Create max-heap with all *N* keys
 	- Iterate through the array backwards, starting at the midpoint *N/2* (all nodes after that are single heaps)
@@ -141,4 +143,3 @@ Hard disc model:
 - Moving particles interact via eleastic collisions with each other and walls.
 - Each particle is a disc with known position, vlcoity, mass and radius.
 - No other forces (like gravity).
-

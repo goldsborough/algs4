@@ -31,6 +31,14 @@ We do so by re-allocating new space. If we re-allocate for each new item, the co
 
 - Doubling strategy: double the capacity each time new space must be allocated (when size == capacity).
 
+Applications:
+
+- Back button in a Web browser.
+- Recursion in a compiler.
+- Undo in a word processor.
+
+Often can model recursion with an explicit stack.
+
 ### Shrinking:
 
 - Thrashing: if we halve the capacity when the stack is half-full, a push-pop-push-pop ... sequence may cause many re-allocations.
@@ -50,13 +58,14 @@ Linked list:
 - Every operation takes constant time in the worst case.
 - Uses extra time and space to deal with the links.
 - Usually slower than Array.
+- Better guaranteed time (always constant).
 
 Dynamic Array:
 
-- Every operation takes constant *amortized* tiem (averaged -- the re-allocation cost is diluted)
+- Every operation takes constant *amortized* time (averaged -- the re-allocation cost is diluted)
 - Less wasted space.
 
-If I want to be sure that every operation will be constant time and cannot have occasional troughs in performance, the linked list will be better. 
+If I want to be sure that every operation will be constant time and cannot have occasional troughs in performance, the linked list will be better.
 
 ## Queues
 
@@ -70,16 +79,8 @@ Interface:
 
 Implementations:
 
-- Linked list: have nodes with pointers to the next element, enqueue by adding elements to the back and dequeue from the front. 
+- Linked list: have nodes with pointers to the next element, enqueue by adding elements to the back and dequeue from the front.
 - Array: Either enqueue by pushing back and dequeue by popping from the front and then moving all subsequent elements back by one index, or use a circular buffer with a first and last index, both wrapping around the array (increment modulo the capacity).
-
-Applications:
-
-- Back button in a Web browser.
-- Recursion in a compiler.
-- Undo in a word processor.
-
-Often can model recursion with an explicit stack.
 
 ## Bag
 
@@ -90,5 +91,3 @@ Interface:
 - add(item): adds an item
 - size(): returns the size
 - iterator(): returns an iterator
-
-

@@ -1,5 +1,7 @@
 # Mergesort
 
+## Never forget that sorting can be done by counting
+
 Basic Plan:
 
 - Divide array into two halves.
@@ -20,7 +22,7 @@ Assertions: Statements to test assumptions about your program.
 - Documents code.
 - Use assertions to check internal invariants.
 
-Proposition: Mergesort uses at most *N lg N* compares and 6 *N lg N* array accesses to sort any aray of size N.
+Proposition: Mergesort uses at most *N lg N* compares and *6N lg N* array accesses to sort any aray of size N.
 
 Proof: The number of compares *C(N)* and array accesses *A(N)* to mergesort an array of size *N* satisfy the recurrences:
 
@@ -49,6 +51,8 @@ Proof: The auxiliary array needs to be of size *N* for the merging operation.
 	In detail, if you have the subarrays [A B C] and [D E F] you would, after having sorted those, normally proceed to merge them by iterating over the two subarrays and always picking the smaller value in the two subarrays at the current index. But if the greatest value in the left half is less than *or equal* the smallest value in the right half, then this would just mean that the `merge` operation would first move all elements from the first subarray into the destination array and then all elements from the second subarray, because every value in the first subarray is smaller than the first element in the second subarray.
 
 	- Eliminate the copy to the auxiliary array. Save time (but not space) by switching the role of the input and auxiliary array in each recursive call.
+
+It is also possible to perform three-way mergesort (or even four-way mergesort) by splitting the array into thirds instead of halves each time, and performing the merge-operation like so. For 3-way mergesort, the complexity is `N log_3(N)`,
 
 ## Bottom-Up mergesort
 
@@ -86,4 +90,7 @@ Proof by counter-example: Long-distance exchange might move an item past some eq
 
 Mergesort: Stability of mergesort depends on the merge operation, which depends on the comparison operation. To be precise, mergesort is stable if we pick the value from *the left subarray* when comparing values from the left and right subarrays that are equal (because the left value was also before the right value before sorting the subarrays).
 
+## Gotchas
 
+* Remember to pick the left element if values are equal during merging.
+* The "only merge if the middle is less than the value before the middle" trick only works if you copy to the auxiliary array in the merge method. Else the values will remain in the auxiliary array if you do not copy them over. So if the middle is less than the previous value, merge, else simply copy over.

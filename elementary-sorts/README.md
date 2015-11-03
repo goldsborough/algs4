@@ -1,8 +1,10 @@
 # Elementary Sorts
 
+## Never forget that sorting can be done by counting
+
  - Re-arrange an array of *N* items according to a certain key
 
-Question: How can sort() know hot to compare data of type Double, String and File without any information about the type of an item's key?
+Question: How can sort() know how to compare data of type Double, String and File without any information about the type of an item's key?
 
 Answer: Callback -> reference to executable code
 
@@ -19,7 +21,7 @@ Callbacks:
 Total order is a binary relation <= that satisfies
 - Antisymmetry: if v <= w and w <= v, then v = w
 - Transitivity: if v <= w and w <= x, v <= x
-- Totality: either v <= w or w <= v or both
+- Totality: either v <= w or w <= v or both (v = w)
 
 Comparable API (Java):
 
@@ -36,7 +38,7 @@ Implement compareTo() so that v.compareTo(w)
 - In iteration i, find index *min* of smallest remaining entry
 - Swap a[i] and a[min]
 
-Selection sort works by taking a sequence of *N* integers in any order and iterating over it sequentially. There is an iterator, index or pointer i that is initially equal to the first position in the array and iterates until its end. The first invariant states that, to the left of the iterator, all values are in non-decreasing order and will no longer be modified (looked at) -- they are fixed. For each iteration, the iterator occupies the spot of the next smallest value, which it seeks to find in the remaining sequence, i.e. at iteration i, the i-th smallest value is searched for. The second invariant of selection sort is that no entry to the right of the iterator is smaller than any entry to the left of the iterator. At each iteration, the goal is to find the next smallest value. Initially, this minimum value is said to be at the index of the first iterator. Then, a second iterator traverses the sequence starting at one position past the first iterator, looking for the smallest remaning value in the sequence. For this, it must traverse the entire remaining set of values. Once the remaining values have been traversed, the values of the first iterator and the value where the minimum was found are swapped. This procedure is performed until the first iterator has been at every position. In fact, the last iteration can be skipped, because there are no following values.
+Selection sort works by taking a sequence of *N* integers in any order and iterating over it sequentially. There is an iterator, index or pointer i that is initially equal to the first position in the array and iterates until its end. The first invariant states that, to the left of the iterator, all values are in non-decreasing order and will no longer be modified (looked at) -- they are fixed. For each iteration, the iterator occupies the spot of the next smallest value, which it seeks to find in the remaining sequence, i.e. at iteration i, the i-th smallest value is searched for. The second invariant of selection sort is that no entry to the right of the iterator is smaller than any entry to the left of the iterator. At each iteration, the goal is to find the next smallest value. Initially, this minimum value is said to be at the index of the first iterator. Then, a second iterator traverses the sequence starting at one position past the first iterator, looking for the smallest remaining value in the sequence. For this, it must traverse the entire remaining set of values. Once the remaining values have been traversed, the values of the first iterator and the value where the minimum was found are swapped. This procedure is performed until the first iterator has been at every position. In fact, the last iteration can be skipped, because there are no following values.
 
 ```python
 def selection(seq):
@@ -45,13 +47,13 @@ def selection(seq):
 		for j in range(i+1, len(seq)):
 			if seq[j] < seq[minimum]:
 				minimum = j
-		seq[i], seq[minimum] = seq[minimum], seq[i] 
+		seq[i], seq[minimum] = seq[minimum], seq[i]
 ```
 
 Invariants:
 
-- Entries to the left of the iterator are fixed and in non-decreasing order.
-- No entry at and to the right of the iterator is smaller than any entry to the left of it.
+1. Entries to the left of the iterator are fixed and in non-decreasing order.
+2. No entry at and to the right of the iterator is smaller than any entry to the left of it.
 
 Proposition:
 
@@ -61,11 +63,31 @@ Proposition:
 
 - Data movement is minimal: Linear number of insertions.
 
+```C++
+template<typename Iterator>
+void selection_sort(Iterator begin, Iterator end)
+{
+	if (begin == end) return;
+
+	for ( ; begin != end; ++begin)
+	{
+		auto smallest = begin;
+
+		for (auto i = std::next(begin); i != end; ++i)
+		{
+			if (*i < *smallest) smallest = i;
+		}
+
+		std::swap(*begin, *smallest);
+	}
+}
+```
+
 ## Insertion sort
 
 - In iteration i, swap a[i] with each larger entry to its left.
 
-Insertion sort is the method one most often uses to sort a deck of cards. For every value in the sequence, one moves backward through the previous set of values and inserts the current value at the position of the first value that is greater, such that the current value is inserted at the position where the previous value is less than or equal and the next value is greater to the current value. In more detail, the algorithm utilizes an iterator i starting at the second position (i.e. index 1 for 0-indexed sequences). The value of iterator i shall be henceforth denoted by x. During each iteration, another iterator j traverses all values *before* the i, looking for the first value y that is less than or equal to the value x of the first iterator i. This means that iterator j iterates *while* y its value is *greater* to the value x of the first iterator i. As soon as a value for y is encountered that does not satisfy the above condition, i.e. that is smaller than or equal to x, iterator j stops. Now it is important to mention that while iterator j moves backwards, its values must be shifted forward, such that when j stops iterating all values after j are at one position further than they were at the start of the current iteration, this can be done by setting the value at index [j + 1] equal to the value at index [j] for every iteration of j. At last, once j hits a value smaller than x, the value at [j + 1] should hold the value of x. For this, x must be saved prior to the iteration of j as it will otherwise have been overriden by the value at [i - 1] when j + 1 = i.
+Insertion sort is the method one most often uses to sort a deck of cards. For every value in the sequence, one moves backward through the previous set of values and inserts the current value at the position of the first value that is greater, such that the current value is inserted at the position where the previous value is less than or equal and the next value is greater to the current value. In more detail, the algorithm utilizes an iterator i starting at the second position (i.e. index 1 for 0-indexed sequences). The value of iterator i shall be henceforth denoted by x. During each iteration, another iterator j traverses all values *before* the i, looking for the first value y that is less than or equal to the value x of the first iterator i. This means that iterator j iterates *while* its value is *greater* than the value x of the first iterator i. As soon as a value of j is encountered that does not satisfy the above condition, i.e. that is smaller than or equal to x, iterator j stops. Now it is important to mention that while iterator j moves backwards, its values must be shifted forward, such that when j stops iterating all values after j are at one position further than they were at the start of the current iteration, this can be done by setting the value at index [j + 1] equal to the value at index [j] for every iteration of j. At last, once j hits a value smaller than or equal to x, the value at [j + 1] should hold the value of x. For this, x must be saved prior to the iteration of j as it will otherwise have been overridden by the value at [i - 1] when j + 1 = i.
 
 ```python
 def insertion(seq):
@@ -86,7 +108,7 @@ Invariants:
 
 Complexity:
 
-To sort a randomly-ordered array with distinct keys, isnertion sort uses __~ 1/4 N^2__ compares and __~1/4 N^2__ exchanges on average (selection sort: __1/2 N^2__).
+To sort a randomly-ordered array with distinct keys, insertion sort uses __~ 1/4 N^2__ compares and __~1/4 N^2__ exchanges on average (selection sort: __1/2 N^2__).
 
 Insertion sort does depend on the order of the sequence (unlike selection sort).
 
@@ -94,7 +116,7 @@ Best case: if the array is in non-decreasing order (correct), insertion sort mak
 
 Worst case: If the array is in descending order with no duplicates, insertion sort makes ~ 1/2 N^2 compares and ~1/2 N^2 exchanges. This is worse than selection sort in the worst case __because it must do more exchanges__ (selection sort always does one exchange per iteration and thus a linear number of exchanges in total).
 
-Definition: An inversion is a pair of keys that are out of order. 
+Definition: An inversion is a pair of keys that are out of order.
 
 In a reversed sequence of values, each key is out of order with the next.
 
@@ -105,6 +127,27 @@ Definition: An array is *partially sorted* if the number of inversions is linear
 Proposition: For partially-sorted arrays, insertion sort runs in linear time.
 
 Proof: Number of exchanges equals the number of inversions.
+
+```C++
+template<typename Iterator>
+void insertion_sort(Iterator begin, Iterator end)
+{
+	if (begin == end) return;
+
+	auto stop = std::prev(begin);
+
+	for (++begin; begin != end; ++begin)
+	{
+		auto value = *begin;
+
+		auto j = begin, i = std::prev(begin);
+
+		for ( ; i != stop && *i > value; --i, --j) *j = *i;
+
+		*j = value;
+	}
+}
+```
 
 ## Shell sort
 
@@ -136,7 +179,7 @@ def shell(seq):
 
 Proposition: The worst-case number of compares used by shellsort with the 3x+1 increments is O(N^(3/2)).
 
-Property: The number of compares used by shellsort with the 3x+1 increments is at most a small multiple of N times the number of increments used. 
+Property: The number of compares used by shellsort with the 3x+1 increments is at most a small multiple of N times the number of increments used.
 
 - Fast unless array size is huge.
 - Tiny, fixed footprint for code (little amount of code to write).
@@ -145,12 +188,40 @@ Property: The number of compares used by shellsort with the 3x+1 increments is a
 
 For an array that is already sorted, the complexity is linearithmic. Since successive increment values of h differ by at least a factor of 3, there are ∼log_3(N) increment values. For each increment value h, the array is already h-sorted so it will make ∼N compares.
 
+```C++
+template<typename RandomAccessIterator>
+void h_sort(RandomAccessIterator begin, RandomAccessIterator end)
+{
+	if (begin == end) return;
+
+	std::size_t stride = 0;
+
+	std::size_t max_stride = std::distance(begin, end)/3;
+
+	while (stride < max_stride) stride = 3 * stride + 1;
+
+	for ( ; stride > 0; stride /= 3)
+	{
+		for (auto i = begin + stride; i < end; i += stride)
+		{
+			auto value = *i;
+
+			auto k = i, j = std::prev(i);
+
+			for ( ; j >= begin && *j > value; j -= stride, k -= stride) *k = *j;
+
+			*k = value;
+		}
+	}
+}
+```
+
 # Shuffling
 
 How to random-shuffle a sequence?
 
 - Generate a random real number for each array entry.
-- Sort the array acording to those numbers.
+- Sort the array according to those numbers.
 
 Proposition: Shuffle sort produces a uniformly random permutation of the input array, provided no duplicate values.
 
@@ -161,13 +232,13 @@ Better: Knuth shuffle
 - Iterate over the array and generate a random index between __0 and i__
 - Swap the values at the current index and the random index
 
-The random index must be between 0 and i, where i is the current iterator position. The reason why, as can be read [here](https://en.wikipedia.org/wiki/Fisher–Yates_shuffle#Implementation_errors) is that for N values, choosing a random index between 0 and N - 1 would yield N^N possibilites for different arrangements. However, there can only be N! different permutations of N. Because N! is less than N^N, using an index betwen 0 and N-1 would mean that some of the N^N possibilites are duplicates and thus the shuffling algorithm would not be uniform. The solution ist to pick the random index between 0 and i or i and N-1, so that the N! possibilities are not oversaturated.
+The random index must be between 0 and i, where i is the current iterator position. The reason why, as can be read [here](https://en.wikipedia.org/wiki/Fisher–Yates_shuffle#Implementation_errors) is that for N values, choosing a random index between 0 and N - 1 would yield N^N possibilities for different arrangements. However, there can only be N! different permutations of N. Because N! is less than N^N, using an index between 0 and N-1 would mean that some of the N^N possibilities are duplicates and thus the shuffling algorithm would not be uniform. The solution is to pick the random index between 0 and i or i and N-1, so that the N! possibilities are not oversaturated.
 
 ## Convex Hull
 
 A convex hull of a set of N points is the smallest polygon that encloses all points.
 
- . . 
+ . .
  .  . .
 . . . . .
  . . .
@@ -175,7 +246,7 @@ A convex hull of a set of N points is the smallest polygon that encloses all poi
 
 -->
  ___
-|. .\___ 
+|. .\___
 /.  . . \__
 |. . . . .|
 | . . .   /
@@ -202,4 +273,18 @@ Graham Scan algorithm:
 
 - How to sort efficiently? Mergesort.
 
+## Bubble Sort
 
+```C++
+template<typename Iterator>
+void bubble_sort(Iterator begin, Iterator end)
+{
+	for (auto i = begin; i != end; ++i)
+	{
+		for (auto j = begin, k = std::next(begin); k != end; ++j, ++k)
+		{
+			if (*k < *j) std::swap(*k, *j);
+		}
+	}
+}
+```

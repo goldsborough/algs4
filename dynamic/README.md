@@ -1,4 +1,3 @@
-
 # Dynamic programming
 
 + "Careful brute force"

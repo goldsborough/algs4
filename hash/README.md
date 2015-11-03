@@ -92,7 +92,7 @@ The complexity is ultimately O(1 + alpha)
 
 ## Open-addressing
 
-An alternative to separate-chaining hash-tables are open-addressed hash-tables, where the table size *m* is greater than the number of keys *n*, such that the load factor *α* is at most 1, *α* being equal to *n/m* (it may be greater than 1 for separate-chaining). The generalized idea of an open-addressed hash-table is to continuously probe slots in the table according to some pattern until a free slot is found for insertion, or until the search key is found (if not, then terminate the search when reaching a free slot). For this, the hash function *h* now no longer only takes the key *k* to hash but also the probe index *i* which modifies the returned value according to the progression in the probe sequence. For example, if *h(k, i)* is called with *h(k, 0)*, the initial probe value will be returned (the same value as *h(k)* returned prevoiusly). If that slot is taken, when inserting, or if it is not the wanted value, for search, i is incremented such that *h(k, i)* then returns the next spot. This is the *generalized* idea. 
+An alternative to separate-chaining hash-tables are open-addressed hash-tables, where the table size *m* is greater than the number of keys *n*, such that the load factor *α* is at most 1, *α* being equal to *n/m* (it may be greater than 1 for separate-chaining). The generalized idea of an open-addressed hash-table is to continuously probe slots in the table according to some pattern until a free slot is found for insertion, or until the search key is found (if not, then terminate the search when reaching a free slot). For this, the hash function *h* now no longer only takes the key *k* to hash but also the probe index *i* which modifies the returned value according to the progression in the probe sequence. For example, if *h(k, i)* is called with *h(k, 0)*, the initial probe value will be returned (the same value as *h(k)* returned prevoiusly). If that slot is taken, when inserting, or if it is not the wanted value, for search, i is incremented such that *h(k, i)* then returns the next spot. This is the *generalized* idea.
 
 Deletion in open-addressed hash-tables is rather complicated. There are two deletion methods. For the first, keys cannot be simply deleted by setting their spots to NIL, because when looking for other keys that also hash to this spot during their probe sequence, but that were inserted at a later spot because the to-be-deleted/cleared spot was taken, the search would terminate at this NIL spot. Thus, the search would be corrupted because the probe sequence should have continued to the real location of that *other key*, but didn't. In this case, keys to be deleted have to be marked as *tombstones*, such that new keys can be inserted at their positions, while searches would still skip them. The second method works only for linear probing, where the hash function is such that *h(k, i + 1) = h(k, i) + 1* (i.e. where the following index is returned). Here, you can simply re-hash all keys to the right in the current cluster, i.e. all keys to the right up to the next NIL spot.
 
@@ -112,7 +112,7 @@ For key-value pairs, use parallel arrays.
 
 Usually M ~ 2 * N.
 
-Mean displacement of new keys: 
+Mean displacement of new keys:
 
 - If M/2 space occupied, mean displacement is ~ 3/2.
 - For full array, mean displacement is ~ sqrt(pi * M/8)
@@ -142,16 +142,27 @@ The initial probe goes to the position of *h_1(k)* and all subsequent probes go 
 
 The second method is more sensical for doubling tables. *h_2* could work in the following way, where *x* is the returned value:
 
-```
+```C++
 return x % 2 ? x : x + 1;
 ```
 
-```
+```Python
 return x if x % 2 else x + 1
 ```
 
 Taking advantage of the fact that x % 2 returns 1 for odd numbers which evaluates to TRUE.
 
+
+## Separate-Chaining vs. Linear probing
+
++ Separate-Chaining:
+	- Easier to implement delete.
+	- Performance degrades gracefully.
+	- Clustering less sensitive to poorly-designed hash function.
+
++ Linear probing:
+	- Less wasted space.
+	- Better cache performance.
 
 ## Variations
 

@@ -1,5 +1,7 @@
 # Quicksort
 
+## Never forget that sorting can be done by counting
+
 - Random-shuffle the array
 - Partition the array so that for some value i (invariants):
 	+ entry a[i] is in place
@@ -27,7 +29,7 @@ Worst case: O(N^2)
 - More likely that your computer is struck by lightning bolt (random-shuffle)
 - Negligible case.
 
-Average case: Number of compares is ~ 1.39 N lg N.
+Average case: Number of compares is `~ 1.39 N lg N`.
 - 39% more compares than mergesort
 - But faster than mergesort in practice because of less data movement.
 
@@ -43,14 +45,14 @@ Practical improvements:
 - You could also just stop the recursive function calls for small subarrays and then do one insertion sort after exiting the first stack (before returning from the main function), then you only have one pass. Recommended.
 
 - Best choice of pivot item = median (which may be anywhere in the sequence).
-- Estimate true median by taking median of sample of three elements. 
+- Estimate true median by taking median of sample of three elements.
 - Possible improvement: 10% when taking median of three.
 
 ## Selection
 
 Given an array of *N* items, find the k-th largest.
 
-Quick-select: Partition the array to find its median, then go left if you need a k lower than the position of the median or right if you need a greater k. The position median of the median always indicates the how-many-eth largest value it is.
+Quick-select: Partition the array to find its median, then go left if you need a k lower than the position of the median or right if you need a greater k. The position of the median always indicates the how-many-eth largest value it is.
 
 Complexity:
  - Probably N lg N upper bound
@@ -122,5 +124,9 @@ Quick     |   Yes     |   No    | N^2/2 |  2N lgN | N lgN | Fastest in practice,
 Quick3    |   Yes     |   No    | N^2/2 |  2N lgN |   N   | Improves Quicksort for duplicates
 ???       |   Yes     |  Yes    | N lgN |  N lgN  | N lgN | Holy sorting grail
 
+Gotchas:
 
-
+* Only sort if there are two elements, else you might end up in an endless recursion, i.e. in C++ you must do `if (begin == end || std::next(begin) == end)`.
+* In the partitioning algorithm, make sure to increment `begin` after swapping, else you have an endless loop for sequences with only one distinct key.
+* Make sure that after partitioning you sort from `(begin, pivot)` and `(__pivot + 1__, end)` (emphasis on the + 1 for pivot; dont' include it).
+* Make sure to check if there is only one value in the partitioning algorithm, else if you do `pivot = begin++` and then `--end` in the for loop, those will move past each other.

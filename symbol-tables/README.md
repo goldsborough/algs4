@@ -2,7 +2,7 @@
 
 Key-value pair abstraction
 - Insert a value with specified key
-- Given a key, search for  the corresponding value.
+- Given a key, search for the corresponding value.
 
 Associative array abstraction: associate one value with each key.
 
@@ -81,7 +81,7 @@ A binary tree is either:
 - empty
 - two disjoint binary trees (left and right)
 
-Symmetrics order: Each node has a key, and every node's key is:
+Symmetric order: Each node has a key, and every node's key is:
 - Larger than all keys in left subtree.
 - Smaller than all keys in right subtree.
 
@@ -244,7 +244,7 @@ Sometimes we need to rotate a right-leaning link to lean left:
 (< E) \
        S
       / \
- (E < S) (< S)
+ (E < S) (> S)
 
  So we set:
 
@@ -255,7 +255,7 @@ Sometimes we need to rotate a right-leaning link to lean left:
 
        S
       / \
-     E   (< S)
+     E   (> S)
 (R) /  \
  (< E) (E < S)
 

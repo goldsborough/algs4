@@ -35,9 +35,9 @@
 
 ## Doubling Hypothesis
 
-- Run program, doubling the size of the input and observe ratios.
+- Run program, doubling the size of the input and observe ratios. Observe to what it converges, do not take the average!
 
-|  N   | T(N) | Ratio | lg(Ratio) | 
+|  N   | T(N) | Ratio | lg(Ratio) |
 | ---- | ---- | ----- | --------  |
 | 1000 | 0.1  |   -   |     -     |
 | 2000 | 0.8  |  7.7  |    2.9    |
@@ -54,7 +54,7 @@
 ## Experimental algorithmics
 
 - System independent effects (determines constant *a* and exponent *b* in power law)
-	
+
 	+ Algorithm.
 	+ Input data.
 
@@ -96,7 +96,7 @@
 ### Types of analyses
 
 1. Best case: Lower bound on cost.
-	
+
 	- Determined by *easiest* input
 	- Provdes a goal for all inputs.
 
@@ -106,7 +106,7 @@
 	- Provides a guarantee for all inputs.
 
 3. Average case: Expected cost for random input.
-	
+
 	- A model for *random* input.
 	- Provides a way to predict the worst case.
 
@@ -141,7 +141,7 @@ The upper bound and worst case is that there are no duplicates and we perform N^
 
 - Arrays in Java have an overhead of 24 bytes, i.e. if you have an array of N 32-bit (4-byte) integers the total array will have a space usage of 4N + 24 bytes.
 - Object overhead in Java is 16 bytes. Nested classes *an extra* 8 bytes (pointer to enclosing class), unless it is declared static. Nested classes also have the object overhead of 16 bytes though.
-- The size of a reference (pointer in C/C++) is 8 bytes. 
+- The size of a reference (pointer in C/C++) is 8 bytes.
 - Padding mandates that each object be a multiple of 8 bytes (so extra bytes may be added).
 
 # Introduction to Algorithms
@@ -161,6 +161,3 @@ We must show three things about a loop invariant:
 2. Maintenance: If it is true before an iteration of the loop, it remains true before the next iteration (after the next assignment, before the next check).
 
 3. Termination: When the loop termiantes, the invariant still holds true and gives us a useful property that helps show that the algorhtm is correct.
-
-
-
