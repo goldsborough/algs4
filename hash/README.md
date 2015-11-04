@@ -80,25 +80,27 @@ Proof: The distribution of list sizes obeys a binomial distribution, because
 - Every key is equally likely to be hashed to any slot of the table (uniformity)
 - Independent of any other/previous/future keys (independence); i.e. a key is just as likely to map to a slot if another key is already there, as if there wasn't already a key there.
 
+i.e. The probability that $k$ keys hash to the same slot is: $\pmatrix{n\\k} \cdot (\frac{1}{n})^k \cdot (\frac{n - 1}{n})^{n - k}$
+
 Considerations: given that the number of probes per search/insert is proportional to N/M:
 
 - If M is too large => too many empty chains (wasted space).
 - If M is too small => chains too long (linear search too expensive).
 - Typical choice: M ~ N/5 (5 elements per chain); (you would resize when N becomes > M * 5) => constant-time operations.
 
-N/M is denoted by alpha and is called the *load factor*.
+N/M is denoted by $\alpha$ and is called the *load factor*.
 
-The complexity is ultimately O(1 + alpha)
+The complexity is ultimately $O(1 + \alpha)$
 
 ## Open-addressing
 
-An alternative to separate-chaining hash-tables are open-addressed hash-tables, where the table size *m* is greater than the number of keys *n*, such that the load factor *α* is at most 1, *α* being equal to *n/m* (it may be greater than 1 for separate-chaining). The generalized idea of an open-addressed hash-table is to continuously probe slots in the table according to some pattern until a free slot is found for insertion, or until the search key is found (if not, then terminate the search when reaching a free slot). For this, the hash function *h* now no longer only takes the key *k* to hash but also the probe index *i* which modifies the returned value according to the progression in the probe sequence. For example, if *h(k, i)* is called with *h(k, 0)*, the initial probe value will be returned (the same value as *h(k)* returned prevoiusly). If that slot is taken, when inserting, or if it is not the wanted value, for search, i is incremented such that *h(k, i)* then returns the next spot. This is the *generalized* idea.
+An alternative to separate-chaining hash-tables are open-addressed hash-tables, where the table size $m$ is greater than the number of keys $n$, such that the load factor $\alpha$ is at most 1, $\alpha$ being equal to $\frac{n}{m}$ (it may be greater than 1 for separate-chaining). The generalized idea of an open-addressed hash-table is to continuously probe slots in the table according to some pattern until a free slot is found for insertion, or until the search key is found (if not, then terminate the search when reaching a free slot). For this, the hash function $h$ now no longer only takes the key $k$ to hash but also the probe index $i$ which modifies the returned value according to the progression in the probe sequence. For example, if $h(k, i)$ is called with $h(k, 0)$, the initial probe value will be returned (the same value as $h(k)$ returned previously). If that slot is taken, when inserting, or if it is not the wanted value, for search, i is incremented such that $h(k, i)$ then returns the next spot. This is the *generalized* idea.
 
-Deletion in open-addressed hash-tables is rather complicated. There are two deletion methods. For the first, keys cannot be simply deleted by setting their spots to NIL, because when looking for other keys that also hash to this spot during their probe sequence, but that were inserted at a later spot because the to-be-deleted/cleared spot was taken, the search would terminate at this NIL spot. Thus, the search would be corrupted because the probe sequence should have continued to the real location of that *other key*, but didn't. In this case, keys to be deleted have to be marked as *tombstones*, such that new keys can be inserted at their positions, while searches would still skip them. The second method works only for linear probing, where the hash function is such that *h(k, i + 1) = h(k, i) + 1* (i.e. where the following index is returned). Here, you can simply re-hash all keys to the right in the current cluster, i.e. all keys to the right up to the next NIL spot.
+Deletion in open-addressed hash-tables is rather complicated. There are two deletion methods. For the first, keys cannot be simply deleted by setting their spots to `null`, because when looking for other keys that also hash to this spot during their probe sequence, but that were inserted at a later spot because the to-be-deleted/cleared spot was taken, the search would terminate at this `null` spot. Thus, the search would be corrupted because the probe sequence should have continued to the real location of that *other key*, but didn't. In this case, keys to be deleted have to be marked as *tombstones*, such that new keys can be inserted at their positions, while searches would still skip them. The second method works only for linear probing, where the hash function is such that $h(k, i + 1) = h(k, i) + 1$ (i.e. where the following index is returned). Here, you can simply re-hash all keys to the right in the current cluster, i.e. all keys to the right up to the next NIL spot.
 
 In an open-addressed hash-table, the expected number of probes at any point in time is:
 
-*__1 / (1 - α)__ = 1 / (1 - n/m) = 1 / ((m - n)/m) = __m/(m - n)__*
+$\frac{1}{1 - \alpha} = \frac{1}{1 - \frac{n}{m}} = \frac{1}{\frac{m - n}{m}} = \frac{m}{m - n} , \text{with } n \neq m \Leftrightarrow \alpha < 1$
 
 ## Linear probing
 
@@ -119,28 +121,30 @@ Mean displacement of new keys:
 
 M should be significantly larger than N, typically a = N/M ~ 1/2 (M = 2N).
 
-One major problem of this method is clustering, here called *primary clustering*, i.e. the formation of long chains of keys. The problem with clusters is that the longer they are, the more likely they are to get longer, since, given the uniform hashing assumption, the probability to hash into a cluster of size *x* in a table of size *m* is *(x + 1)/m*. *x* for the values already in the cluster and *+1* for the spot to the right of the cluster. Especially harmful are insertions into the only spot between two clusters (i.e. joining them).
+One major problem of this method is clustering, here called *primary clustering*, i.e. the formation of long chains of keys. The problem with clusters is that the longer they are, the *more likely they are to get longer*, since, given the uniform hashing assumption, the probability to hash into a cluster of size $x$ in a table of size $m$ is $\frac{x + 1}{m}$. $x$ for the values already in the cluster and plus $1$ for the spot to the right of the cluster. Especially harmful are insertions into the only spot between two clusters (i.e. joining them).
 
 ## Quadratic probing
 
 Another method that causes clustering, but less of it, thus termed *secondary clustering*, is quadratic probing. Here the hash function follows the schema:
 
-*h(k, i) = h'(k) + c_1i + c_2i^2 mod m*
+$h(k, i) = h'(k) + c_1i + c_2i^2 \mod m$
 
-where *h'(k)* is an auxiliary pre-hashing function, *c_1* and *c_2* are randomly chosen constants and *i* is the probe sequence index. Note that the key, i.e. the initial probe value, determines the entire sequence, thus two keys *h_1* and *h_2* where *h'(k_1) = h'(k_2)* will hash to the same points. This method simply limits primary clustering.
+where $h'(k)$ is an auxiliary pre-hashing function, $c_1$ and $c_2$ are randomly chosen constants and $i$ is the probe sequence index. Note that the key, i.e. the initial probe value, determines the entire sequence, thus two keys $k_1$ and $k_2$ where $h'(k_1) = h'(k_2)$ will hash to the same locations. This method simply limits primary clustering (and replaces it with *secondary clustering*).
 
 ## Double hashing
 
-Double hashing greatly reduces clustering and is one of the best methods for hashing in open-addressed schemes. It uses two auxiliary pre-hashing functions *h_1(k)* and *h_2(k)*, such that the hashing function *h(k, i)* is of the form:
+Double hashing greatly reduces clustering and is one of the best methods for hashing in open-addressed schemes. It uses two auxiliary pre-hashing functions $h_1(k)$ and $h_2(k)$, such that the hashing function $h(k, i)$ is of the form:
 
-*h(k, i) = [h_1(k) + ih_2(k)] mod m*
+$h(k, i) = [h_1(k) + i \cdot h_2(k)] \mod m$
 
-The initial probe goes to the position of *h_1(k)* and all subsequent probes go to integer multiples of *h_2(k)* position further. This method is effective because two keys *h_1* and *h_2* where *h_1(k_1) = h_1(k_2)* do not necessarily hash to the same subsequent probe positions, given that *h_2(k_1) != h_2(k_2)*. It is important that *h_2(k)* be relatively prime to the table size *m* for the entire table to be searched. There are two ways to ensure this:
+The initial probe goes to the position of $h_1(k)$ and all subsequent probes go to integer multiples of $h_2(k)$ positions further. This method is effective because for two keys $h_1$ and $h_2$ is is very unlikely that if already $h_1(k_1) = h_1(k_2)$ also $h_2(k_1) = h_2(k_2)$.
 
-1. Make the table size *m* prime and ensure that *h_2* always returns a positive integer less than *m*.
-2. __Let *m* be a power of two__ and make *h_2* return an odd number.
+__It is important that $h_2(k)$ be relatively prime to the table size $m$ for the entire table to be searched.__ There are two ways to ensure this:
 
-The second method is more sensical for doubling tables. *h_2* could work in the following way, where *x* is the returned value:
+1. Make the table size $m$ prime and ensure that $h_2$ always returns a positive integer less than $m$.
+2. __Let $m$ be a power of two__ and make $h_2$ return an odd number.
+
+The second method is more sensical for doubling tables. $h_2$ could work in the following way, where $x$ is the returned value:
 
 ```C++
 return x % 2 ? x : x + 1;
@@ -150,7 +154,7 @@ return x % 2 ? x : x + 1;
 return x if x % 2 else x + 1
 ```
 
-Taking advantage of the fact that x % 2 returns 1 for odd numbers which evaluates to TRUE.
+Taking advantage of the fact that `x % 2` returns 1 for odd numbers which evaluates to `TRUE`.
 
 
 ## Separate-Chaining vs. Linear probing
@@ -168,13 +172,7 @@ Taking advantage of the fact that x % 2 returns 1 for odd numbers which evaluate
 
 Two-probe hashing:
 - Hash to two positions, insert key in shorter of the two chains.
-- Reduces expected length of the longest chain to lg lg N (from lg N).
-
-Double hashing:
-- Use linear probing, but skip a variable amount, not just 1 each time.
-- Effectively eliminates clustering.
-- Can allow table to become nearly full.
-- More difficult to implement delete.
+- Reduces expected length of the longest chain to $\log \log N$ (from $\log N$).
 
 ## Hash tables vs. Balanced Search Tree
 
@@ -195,13 +193,13 @@ To grow a table of size m to m':
 
 - Allocate table of size m'
 - Build new hash h' (if m changes, h' must use a different value (matters if you don't use the division method for re-hashing))
-- rehash -> for each old value, rehash and insert into new table
+- rehash -> for each old value, compute new hash and insert into new table
 
-If we would make m' = m + 1, the complexity would be theta(1 + 2 + 3 + ... + n) = theta(N^2)
+If we would make $m' = m + 1$, the complexity would be $\Theta(1 + 2 + 3 + ... + n) = \Theta(N^2)$
 
-We really want m' = 2m.
+We really want $m' = 2m$.
 
-If we do m' = 2m, then we'll have theta(1 + 2 + 4 + 8 + 16 ... + n). Every time we rebuild in linear time, but we're only doing it log n times (log n doublings to get from 1 to n), thus we speak of *amortized cost* (like with arrays). I.e., a hash table is amortized constant time for insertion/deletion/search.
+If we do $m' = 2m$, then we'll have $\Theta(1 + 2 + 4 + 8 + 16 ... + n)$. Every time we rebuild in linear time, but we're only doing it log n times (log n doublings to get from 1 to n), thus we speak of *amortized cost* (like with arrays). I.e., a hash table is amortized constant time for insertion/deletion/search.
 
 Amortization: an operation takes *T(n) amortized*, if k operations take <= k * T(n) time. The occasional spike in running time is diluted.
 
@@ -282,6 +280,6 @@ i.e. a polynomial of order *k-1* with arbitrary constants *0 < a_i < p*.
 
 ## Other
 
-- Avalanching hash functions: functions where small changes in the input cause great changes in the output: i.e. h("hel") and h("hell") produce entirely different hash values givne only the very small change in the input.
+- Avalanching hash functions: functions where small changes in the input cause great changes in the output: i.e. h("hel") and h("hell") produce entirely different hash values given only the very small change in the input.
 
 - When storing passwords, it is a good idea to not associate the actual password with the user, but the output of a hash function for that password. That way, if a hacker runs off with your passwords/user data, he or she gets not the real passwords, but only the useless hash-values. When logging in, simply run the input through the same hash function and see if it hashes to the value associated with the user in the database. Just make sure the attacker cannot see/get your hash function.
