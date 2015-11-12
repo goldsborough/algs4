@@ -78,7 +78,7 @@ public static int maxDegree(Graph G)
 ```Java
 public static int averageDegree(Graph G)
 {
-	return (2.0 * G.E()) / G.V();
+	return (2.0 * G.V()) / G.E();
 }
 ```
 
@@ -105,7 +105,7 @@ Graph representation:
 
 + Set-of-edges representation: Keep linked-list/array for the edges (with the vertices they connect).
 
-+ Adjacency-matrix representation: Maintain a two-dimensional `V`-by-`V` boolean array specifying whether or not any vertex is connected to any other vertex.Better if the graph is *dense*, i.e. few vertices, many edges. For each edge `v-w` in the graph: `adjacency[v][w] == adjacency[w][v] == true`
++ Adjacency-matrix representation: Maintain a two-dimensional `V`-by-`V` boolean array specifying whether or not any vertex is connected to any other vertex. __Better if the graph is *dense*__, i.e. few vertices, many edges. For each edge `v-w` in the graph: `adjacency[v][w] == adjacency[w][v] == true`
 
 + Adjancency-list representation: vertex-indexed array of linked-lists (generally a *bag*), where each linked-list (chain) contains all the vertices that vertex is connected to. Better if the graph is *sparse*, i.e. many vertices, few edges.
 

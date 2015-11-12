@@ -16,6 +16,9 @@ Character accesses:
 | Red-Black BST  | L + c lg^2(N)  |    c lg^2(N)   | c lg^2(N) | 4N    |
 | Hash-Table     | L              | L              | L         | L     |
 
+BST: $lg(N)$ to find the correct node (with few comparisons in between), but then additional $L$ to compare to the correct string.
+Trie: Only $L$!
+
 ## R-way tries
 
 trie -> re-*trie*-val
@@ -42,7 +45,7 @@ a(6) l  (0)e  o
 
 There is a value associated with e, because it is the last character of the key "she".
 
-Note that the existence of a key is determined entirely by wether or not it is linked to by another node, i.e. there is no explicit `String key` in the Node. The key is in the trie if there is a non-null node at that index for another node.
+Note that the existence of a key is determined entirely by wether or not it is linked to by another node, i.e. __there is no explicit `String key` in the Node__. The key is in the trie if there is a non-null node at that index for another node.
 
 Search hit: `get("shells")`
 
@@ -78,4 +81,9 @@ R-way trie -> R = number of links in each node
                                       ^
 								height of R-way trie
 
-Problem: way too huge memory use. Imagine spell-checking for Unicode (65546-way trie!!!!)
+Problem: way too huge memory use. Imagine spell-checking for Unicode (65536-way trie!!!!)
+
+## Gotchas
+
+* Don't forget that you do not store the key in the node.
+* Don't forget that a search miss is not only if a node is null, but also if we've reached the end of the search string __and there is no value associated with the node__.

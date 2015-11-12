@@ -93,14 +93,17 @@ Tree is like a quicksort-partition: all elements on the left than the pivot are 
 
 - Best case: the tree is perfectly balanced, such that a search is always logarithmic. E.g. for insertions 4, 2, 6, 1, 3, 5, 7 you get:
 
-     4
+```
+	 4
    /   \
   2     6
  / \   / \
 1   3 5   7
+```
 
 - Worst case: Always add greater or always smaller value, then like linked list -- search is linear O(N). E.g. for insertions 1, 2, 3, 4:
 
+```
 1
  \
   2
@@ -108,6 +111,7 @@ Tree is like a quicksort-partition: all elements on the left than the pivot are 
     3
      \
       4
+```
 
 Proposition: If *N* keys are inserted into a BST in *random* order, the expected number of compares for a search/insert is ~ 1.39 lg N (for random order).
 Proof: Exactly like quicksort partitioning.
@@ -192,7 +196,7 @@ Then the middle of the three keys is moved up to the parent node to create a thr
  P  S  Z
 / \/ \/ \
 
-Note that this is possible because when the middle of the original 4-node is moved up, the lower of the 4-node fits between the upper key (R) and the middle key (X), because S, X and Z were greater than R, while S is less than X. Z remains larger than all.
+Note that this is possible because when the middle of the original 4-node is moved up, the left of the 4-node fits between the upper key (R) and the middle key (X), because S, X and Z were greater than R, while S is less than X. Z remains larger than all.
 
 To insert into a 3-node below a 3-node:
 - Add new key to lower 3-node to create temporary 4-node.

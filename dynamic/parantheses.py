@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from timeit import timeit
 
 def parantheses(n):
 	def _parantheses(opened, closed):
@@ -18,7 +19,8 @@ def parantheses(n):
 
 
 def main():
-	print(parantheses(3))
+	#print(parantheses(3))
+	print(timeit('parantheses(3)', globals=globals()))
 
 
 if __name__ == '__main__':

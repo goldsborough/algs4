@@ -44,9 +44,10 @@ If you have signed integers, you have to use the absolute value of the integer.
 
 But even then, you should make it positive by masking it with 0x7FFFFFFF. This mask leaves all bits except for the sign bit the way they were before, but always unsets the sign bit so that the value is positive.
 
-Expect two values in the same bin (same hash value) after ~ sqrt(pi * M / 2) tosses.
+Expect two values in the same bin (same hash value) after $\sqrt{
+	\frac{\pi M}{2}}$ tosses.
 
-Expect every bin has at least one value after ~ M ln M attempts.
+Expect every bin has at least one value after $M \ln M$ attempts.
 
 ## Caching
 
@@ -65,7 +66,7 @@ Note that this is only valid for immutable types as else the object/key would ch
   + a, b random
   + p prime larger than number of bits
 
-The hash function we implement or use falls into the Uniform Hashing Assumption, i.e. we can assume that for all practical purposes the function will or should scramble/hash keys uniformly among the indices between 0 and M - 1.
+The hash function we implement or use falls into the __Uniform Hashing Assumption__, i.e. we can assume that for all practical purposes the function will or should scramble/hash keys uniformly among the indices between 0 and M - 1.
 
 ## Separate chaining
 
@@ -110,14 +111,14 @@ Insert: Put at table index i if free; if not try i + 1, i + 2, etc. (search for 
 
 Search: Look at table index i, if can't find look at i + 1, i + 2 etc.
 
-For key-value pairs, use parallel arrays.
+For key-value pairs, use parallel arrays (or nodes).
 
-Usually M ~ 2 * N.
+Usually $M \approx 2N$.
 
 Mean displacement of new keys:
 
-- If M/2 space occupied, mean displacement is ~ 3/2.
-- For full array, mean displacement is ~ sqrt(pi * M/8)
+- If $M/2$ space occupied, mean displacement is $\approx 3/2$.
+- For full array, mean displacement is $\approx \sqrt{\frac{\pi M}{8}}$
 
 M should be significantly larger than N, typically a = N/M ~ 1/2 (M = 2N).
 
@@ -142,7 +143,7 @@ The initial probe goes to the position of $h_1(k)$ and all subsequent probes go 
 __It is important that $h_2(k)$ be relatively prime to the table size $m$ for the entire table to be searched.__ There are two ways to ensure this:
 
 1. Make the table size $m$ prime and ensure that $h_2$ always returns a positive integer less than $m$.
-2. __Let $m$ be a power of two__ and make $h_2$ return an odd number.
+2. __Let $m$ be a power of two__ and __make $h_2$ return an odd number__.
 
 The second method is more sensical for doubling tables. $h_2$ could work in the following way, where $x$ is the returned value:
 
@@ -232,6 +233,8 @@ r.__call__ (i.e. r()) will give you the hash value.
 Called Karp-Rabin string matching algorithm.
 
 # Compute the hash value of s (which we'll compare too)
+
+```
 rs = new Rolling Hash
 rt = new Rolling Hash
 
@@ -251,8 +254,9 @@ if rs() == rt():
 		found match
 	else:
 		# happens with probability <= 1/|s|
+```
 
-O(|s| + |t| + #matches * |s|)
+$O(|s| + |t| + \#matches * |s|)$
 
 Use division method h(k) = k mod m
 
@@ -260,9 +264,9 @@ m must be a random prime!!! at least as big as |s| (>= length of s)
 
 treat string x as multidigit number, with base a = alphabet size (ascii 256)
 
-to append: u = [u * a + ord(c)] % p
+to append: $u = [u \cdot a + ord(c)] % p$
 
-to skip: u = u - ord(c) * a^(|u| - 1)
+to skip: $u = u - ord(c) * a^{|u| - 1}$
 
 r = r * a + ord(c) mod m
 

@@ -27,7 +27,7 @@ Implementations:
 
 Fixed size array is problematic because the client must supply the size. Rather we would like to dynamically resize the stack.
 
-We do so by re-allocating new space. If we re-allocate for each new item, the cost of inserting *N* items is poportional to *N^2*.
+We do so by re-allocating new space. If we re-allocate for each new item, the cost of inserting *N* items is proportional to *N^2*.
 
 - Doubling strategy: double the capacity each time new space must be allocated (when size == capacity).
 
@@ -49,7 +49,7 @@ Invariant: The array is then between 25% and 100% full (lower-bound is exclusive
 
 ### Amortized Time
 
-Amortized time is essentially a measure of average time per operation for a sequence of operations. Inserting N elements into an array takes total time proportional to N, but the time per operation, the amortized const, is constant time. For example in a dynamic array, you double the size at certain intervals. But those periodic high costs of re-allocation can be "spread out" over all insertion operations and are then "diluted", such that the amortized time is still O(1). Consider that when you double the size of the array, it takes twice as long to double again as before. At the same time, the doubling will take twice as long because there are twice as many elements. Re-allocation takes twice as long, but we can wait twice as long, so the cost is essentially diluted.
+Amortized time is essentially a measure of average time per operation for a sequence of operations. Inserting N elements into an array takes total time proportional to N, but the time per operation, the amortized const, is constant time. For example in a dynamic array, you double the size at certain intervals. But those periodic high costs of re-allocation can be "spread out" over all insertion operations and are then "diluted", such that the amortized time is still O(1). Consider that, when you double the size of the array, it takes twice as long to double again as before. At the same time, the doubling will take twice as long because there are twice as many elements. Re-allocation takes twice as long, but we can wait twice as long, so the cost is essentially diluted. If it costs X after X insertions, the amortized time is constant because $X/X = 1$. After, it costs 2X after 2X insertions, so still $2x/2x = 1$
 
 ### Array vs Linked List
 

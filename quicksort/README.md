@@ -1,6 +1,6 @@
 # Quicksort
 
-## Never forget that sorting can be done by counting
+## Never forget that sorting can be done by counting (bucket-sort)
 
 - Random-shuffle the array
 - Partition the array so that for some value i (invariants):
@@ -31,7 +31,7 @@ Worst case: O(N^2)
 
 Average case: Number of compares is `~ 1.39 N lg N`.
 - 39% more compares than mergesort
-- But faster than mergesort in practice because of less data movement.
+- __But faster than mergesort in practice because of less data movement.__
 
 Random Shuffle
 - Probabilistic guarantee against worst case.
@@ -89,11 +89,11 @@ Thereby can have quicksort move elements that are equal to the key into the midd
 
 Sorting lower bound: If there are *n* distinct keys and the i-th one occurs x_i times, a compare-based sorting algorithm must use at least
 
-*lg(N!/(x_1! x_2! ... x_n!)) ~ -sum_{i=1}^{n} x_i lg(x_i/N)*
+$lg(\frac{N!}{x_1! x_2! ... x_n!}) ~ -\sum_{i=1}^{n} x_i lg(\frac{x_i}{N})$
 
-compares in the worst case (N lg N when all are distinct; linear when only a constant number of distinct keys).
+compares in the worst case ($N \lg N$ when all are distinct; linear when only a constant number of distinct keys).
 
-Bottom line: Randomized quicksort with 3-way partitioning reduces running time from *linearithmic to linear* in broad class of applications.
+Bottom line: __Randomized quicksort with 3-way partitioning reduces running time from *linearithmic to linear* in broad class of applications.__
 
 Questions to consider for picking or implementing a sorting algorithm:
 
@@ -128,5 +128,5 @@ Gotchas:
 
 * Only sort if there are two elements, else you might end up in an endless recursion, i.e. in C++ you must do `if (begin == end || std::next(begin) == end)`.
 * In the partitioning algorithm, make sure to increment `begin` after swapping, else you have an endless loop for sequences with only one distinct key.
-* Make sure that after partitioning you sort from `(begin, pivot)` and `(__pivot + 1__, end)` (emphasis on the + 1 for pivot; dont' include it).
+* Make sure that after partitioning you sort from `(begin, pivot)` and `(__pivot + 1__, end)` (emphasis on the + 1 for pivot; don't include it).
 * Make sure to check if there is only one value in the partitioning algorithm, else if you do `pivot = begin++` and then `--end` in the for loop, those will move past each other.
