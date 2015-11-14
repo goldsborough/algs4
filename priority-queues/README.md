@@ -143,3 +143,7 @@ Hard disc model:
 - Moving particles interact via eleastic collisions with each other and walls.
 - Each particle is a disc with known position, vlcoity, mass and radius.
 - No other forces (like gravity).
+
+### Gotchas
+
+* Careful that when doing heapsort, your iterators don't start at 1. So to compute the left child, you'd have to use 2 * (std::distance(begin, iterator) + 1) - 1 and without the - 1 for the right child.

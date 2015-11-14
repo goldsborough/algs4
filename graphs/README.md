@@ -34,7 +34,7 @@ Graph Representation as a drawing can be misleading, as the same graph can be dr
 
 Vertex Representation:
 + Integers between `0` and `V-1`.
-+ Why: We can convert between naames and integers with a symbol table.
++ Why: We can convert between names and integers with a symbol table.
 
 API:
 
@@ -105,14 +105,14 @@ Graph representation:
 
 + Set-of-edges representation: Keep linked-list/array for the edges (with the vertices they connect).
 
-+ Adjacency-matrix representation: Maintain a two-dimensional `V`-by-`V` boolean array specifying whether or not any vertex is connected to any other vertex. __Better if the graph is *dense*__, i.e. few vertices, many edges. For each edge `v-w` in the graph: `adjacency[v][w] == adjacency[w][v] == true`
++ Adjacency-matrix representation: Maintain a two-dimensional `V`-by-`V` boolean array specifying whether or not any vertex is connected to any other vertex. __Better if the graph is *dense*__, i.e. few vertices, many edges. For each edge `v-w` in the graph: `adjacency[v][w] == adjacency[w][v] == true`. Insertion and deletion of an edge is quick, simply flip a boolean. Can't allow multiple connections though (e.g. Euler tour problem not solveable). You could actually cut it at the diagonal to avoid duplicate edges (from-to, to-from)
 
-+ Adjancency-list representation: vertex-indexed array of linked-lists (generally a *bag*), where each linked-list (chain) contains all the vertices that vertex is connected to. Better if the graph is *sparse*, i.e. many vertices, few edges.
++ Adjacency-list representation: vertex-indexed array of linked-lists (generally a *bag*), where each linked-list (chain) contains all the vertices that vertex is connected to. __Better if the graph is *sparse*, i.e. many vertices, few edges.__
 
 
 Complexity of the aforementioned representations:
 
-| Representation | Space | add edge | are v and w connected? | iterate over adjacent vertices |
+| Representation | Space | add edge | are v and w directly connected? | iterate over adjacent vertices |
 |----------------|-------|----------|------------------------|--------------------------------|
 | List of edges  |   E   |   O(1)   |         O(E)           |               O(E)		      |
 | Adj. matrix    |  V^2  |   O(1)   |         O(1)		     |               O(V)             |
@@ -209,3 +209,8 @@ Problem: Travelling Salesman -> Is there a cycle that visits every vertex exactl
 Problem: Are two graphs identical except for vertex names? (Graph-isomorphism problem).
 
 Problem: Can you lay out the graph in the plane without crossing edges?
+
+## Gotchas
+
+* Adjacency-matrix:
+	* For depth/breadth-first search, you (can) terminate one step early, because you don't have to check if `vertex == target` but only if `connected(vertex, target)` (one less recursive call / iteration).

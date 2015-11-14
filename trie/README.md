@@ -87,3 +87,27 @@ Problem: way too huge memory use. Imagine spell-checking for Unicode (65536-way 
 
 * Don't forget that you do not store the key in the node.
 * Don't forget that a search miss is not only if a node is null, but also if we've reached the end of the search string __and there is no value associated with the node__.
+* Don't forget to make the character value of your string match your alphabet length (e.g. if using 26 letters a-z, decrement char value by 97)
+
+
+## Comparison
+
+Advantages of tries:
+
+The basics:
+
+* Predictable O(k) lookup time where k is the size of the key
+* Lookup can take less than k time if it's not there
+* Supports ordered traversal
+* No need for a hash function
+* Deletion is straightforward
+
+New operations:
+
+* You can quickly look up prefixes of keys, enumerate all entries with a given prefix, etc.
+
+Advantages of hashtables:
+
+* Everyone knows hashtables, right? Your system will already have a nice well-optimized implementation, faster than tries for most purposes.
+* Your keys need not have any special structure.
+* More space-efficient than the obvious linked trie structure

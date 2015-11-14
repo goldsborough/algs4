@@ -124,7 +124,7 @@ Quick     |   Yes     |   No    | N^2/2 |  2N lgN | N lgN | Fastest in practice,
 Quick3    |   Yes     |   No    | N^2/2 |  2N lgN |   N   | Improves Quicksort for duplicates
 ???       |   Yes     |  Yes    | N lgN |  N lgN  | N lgN | Holy sorting grail
 
-Gotchas:
+### Gotchas:
 
 * Only sort if there are two elements, else you might end up in an endless recursion, i.e. in C++ you must do `if (begin == end || std::next(begin) == end)`.
 * In the partitioning algorithm, make sure to increment `begin` after swapping, else you have an endless loop for sequences with only one distinct key.
