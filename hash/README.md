@@ -81,7 +81,7 @@ Proof: The distribution of list sizes obeys a binomial distribution, because
 - Every key is equally likely to be hashed to any slot of the table (uniformity)
 - Independent of any other/previous/future keys (independence); i.e. a key is just as likely to map to a slot if another key is already there, as if there wasn't already a key there.
 
-i.e. The probability that $k$ keys hash to the same slot is: $\pmatrix{n\\k} \cdot (\frac{1}{n})^k \cdot (\frac{n - 1}{n})^{n - k}$
+i.e. The probability that $k$ keys hash to the same slot is: $\pmatrix{n\\k} \cdot (\frac{1}{m})^k \cdot (\frac{m - 1}{m})^{n - k}$
 
 Considerations: given that the number of probes per search/insert is proportional to N/M:
 
@@ -97,7 +97,7 @@ The complexity is ultimately $O(1 + \alpha)$
 
 An alternative to separate-chaining hash-tables are open-addressed hash-tables, where the table size $m$ is greater than the number of keys $n$, such that the load factor $\alpha$ is at most 1, $\alpha$ being equal to $\frac{n}{m}$ (it may be greater than 1 for separate-chaining). The generalized idea of an open-addressed hash-table is to continuously probe slots in the table according to some pattern until a free slot is found for insertion, or until the search key is found (if not, then terminate the search when reaching a free slot). For this, the hash function $h$ now no longer only takes the key $k$ to hash but also the probe index $i$ which modifies the returned value according to the progression in the probe sequence. For example, if $h(k, i)$ is called with $h(k, 0)$, the initial probe value will be returned (the same value as $h(k)$ returned previously). If that slot is taken, when inserting, or if it is not the wanted value, for search, i is incremented such that $h(k, i)$ then returns the next spot. This is the *generalized* idea.
 
-Deletion in open-addressed hash-tables is rather complicated. There are two deletion methods. For the first, keys cannot be simply deleted by setting their spots to `null`, because when looking for other keys that also hash to this spot during their probe sequence, but that were inserted at a later spot because the to-be-deleted/cleared spot was taken, the search would terminate at this `null` spot. Thus, the search would be corrupted because the probe sequence should have continued to the real location of that *other key*, but didn't. In this case, keys to be deleted have to be marked as *tombstones*, such that new keys can be inserted at their positions, while searches would still skip them. The second method works only for linear probing, where the hash function is such that $h(k, i + 1) = h(k, i) + 1$ (i.e. where the following index is returned). Here, you can simply re-hash all keys to the right in the current cluster, i.e. all keys to the right up to the next NIL spot.
+Deletion in open-addressed hash-tables is rather complicated. There are two deletion methods. For the first, keys cannot be simply deleted by setting their spots to `null`, because when looking for other keys that also hash to this spot during their probe sequence, but that were inserted at a later spot because the to-be-deleted/cleared spot was taken, the search would terminate at this `null` spot. Thus, the search would be corrupted because the probe sequence should have continued to the real location of that *other key*, but didn't. In this case, keys to be deleted have to be marked as *tombstones* (dead/alive), such that searches skip them. The second method works only for linear probing, where the hash function is such that $h(k, i + 1) = h(k, i) + 1$ (i.e. where the following index is returned). Here, you can simply __re-hash all keys to the right in the current cluster (up to the next empty spot)__, i.e. all keys to the right up to the next NIL spot.
 
 In an open-addressed hash-table, the expected number of probes at any point in time is:
 
@@ -274,11 +274,11 @@ r = r * a + ord(c) mod m
 
 k-wise independent hash functions have the property that for every set of *k* keys *h(x)* returns a value that is independent from previous calls to that function for any of the *k* keys. For example, a 2-wise or pairwise-independent hash function is defined such that:
 
-*Pr{h(x) = a_1 ∧ h(y) = a_1} = 1/m^2 = (1/m) x (1/m)*
+$Pr{h(x) = a_1 ∧ h(y) = a_1} = 1/m^2 = (1/m) x (1/m)$
 
 i.e. that the call to *h(y)* is independent from the call to *h(x)*. A hash function to achieve this:
 
-*h(x) = [(sum_{i=0}^{k-1} a_i x^i) mod p] mod m*
+$$h(x) = \left[\left(\sum_{i=0}^{k-1} a_i x^i\right) \mod p\right] \mod m$$
 
 i.e. a polynomial of order *k-1* with arbitrary constants *0 < a_i < p*.
 

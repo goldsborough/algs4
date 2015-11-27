@@ -51,11 +51,13 @@ Array representation
 
 Tree representation (no parent less than any child):
 
+```
 (0)       X  
         /   \  
 (1)    C     O  
       / \   / \  
 (2)  A   B M   K  
+```
 
 Array representation:
 

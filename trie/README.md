@@ -16,7 +16,7 @@ Character accesses:
 | Red-Black BST  | L + c lg^2(N)  |    c lg^2(N)   | c lg^2(N) | 4N    |
 | Hash-Table     | L              | L              | L         | L     |
 
-BST: $lg(N)$ to find the correct node (with few comparisons in between), but then additional $L$ to compare to the correct string.
+BST: $lg(N) + 1 = h$ to find the correct node (with few comparisons in between), but then additional $L$ to compare to the correct string.
 Trie: Only $L$!
 
 ## R-way tries
@@ -77,7 +77,7 @@ R-way trie -> R = number of links in each node
 | :------------- | :------------- | :------------- | :-------- | :---- |
 | Red-Black BST  | L + c lg^2(N)  |    c lg^2(N)   | c lg^2(N) | 4N    |
 | Hash-Table     | L              | L              | L         | L     |
-| Trie           | L              | log_R(N)       | L         |(R+1)N |
+| Trie           | L              | $\log_R(N)$    | L         |  $RN$ |
                                       ^
 								height of R-way trie
 

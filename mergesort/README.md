@@ -6,7 +6,7 @@ Basic Plan:
 
 - Divide array into two halves.
 - Recursively sort each half.
-- Merget the two halves.
+- Merge the two halves.
 
 Goal: Given two sorted subarrays a[lo] to a[mid] and a[mid+1] to a[hi], replace them with a sorted array to a[lo] to a[hi].
 
@@ -22,7 +22,7 @@ Assertions: Statements to test assumptions about your program.
 - Documents code.
 - Use assertions to check internal invariants.
 
-Proposition: Mergesort uses at most *N lg N* compares and *6N lg N* array accesses to sort any aray of size N.
+Proposition: Mergesort uses at most *N lg N* compares and *6N lg N* array accesses to sort any array of size N.
 
 Proof: The number of compares *C(N)* and array accesses *A(N)* to mergesort an array of size *N* satisfy the recurrences:
 
@@ -76,7 +76,7 @@ Proposition: Any compare-based sorted algorithm  must use at least lg (N!) ~ N l
 
 ## Stability
 
-Stability is the discussion of how or whether sorting algorithms maintain the order of elements in the original sequence, when re-ordering. For example, when first sorting the sequence of strings ["cd", "abe", "ape" "e"] lexicographically, the result would be ["abe", "ape", "cd", "e"]. Stability comes into play when now asking, "if we now sort the resulting sequence by length, will keys that were equal according to the previous order, stay in their arrangment if they are also equal according to the new order?" Some sorting algorithms will re-order ["abe", "ape", "cd", "e"] to ["e", "cd", "abe", "ape"] when asked to sort by length. Here, "abe" and "ape" remained in their previous order. Another sorting algorithm may not be stable, and result in the newly ordered sequence ["e", "cd", "ape", "abe"].
+Stability is the discussion of how or whether sorting algorithms maintain the order of elements in the original sequence, when re-ordering. For example, when first sorting the sequence of strings ["cd", "abe", "ape" "e"] lexicographically, the result would be ["abe", "ape", "cd", "e"]. Stability comes into play when now asking, "if we now sort the resulting sequence by length, will keys that were equal according to the previous order, stay in their arrangement if they are also equal according to the new order?" A stable sorting algorithm will re-order ["abe", "ape", "cd", "e"] to ["e", "cd", "abe", "ape"] when asked to sort by length. Here, "abe" and "ape" remained in their previous order. Another sorting algorithm may not be stable, and result in the newly ordered sequence ["e", "cd", "ape", "abe"].
 
 - A stable sort preserves the relative order of items with equal keys.
 

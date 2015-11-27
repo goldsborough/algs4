@@ -39,7 +39,6 @@ Vertex Representation:
 API:
 
 - `Graph(int V)`: create an empty graph with `V` vertices.
-- `Graph(File in)`: create graph from an input string.
 - `void addEdge(int v, int w)`: add an edge between `v` and `w`.
 - `Iterable<Integer> adjacent(int v)`: Get an iterator to all vertices adjacent to `v`.
 - `int numberOfEdges()`: The number of edges in the graph.
@@ -105,7 +104,7 @@ Graph representation:
 
 + Set-of-edges representation: Keep linked-list/array for the edges (with the vertices they connect).
 
-+ Adjacency-matrix representation: Maintain a two-dimensional `V`-by-`V` boolean array specifying whether or not any vertex is connected to any other vertex. __Better if the graph is *dense*__, i.e. few vertices, many edges. For each edge `v-w` in the graph: `adjacency[v][w] == adjacency[w][v] == true`. Insertion and deletion of an edge is quick, simply flip a boolean. Can't allow multiple connections though (e.g. Euler tour problem not solveable). You could actually cut it at the diagonal to avoid duplicate edges (from-to, to-from)
++ Adjacency-matrix representation: Maintain a two-dimensional `V`-by-`V` boolean array specifying whether or not any vertex is connected to any other vertex. __Better if the graph is *dense*__, i.e. few vertices, many edges. For each edge `v-w` in the graph: `adjacency[v][w] == adjacency[w][v] == true`. Insertion and deletion of an edge is quick, simply flip a boolean. __Can't allow multiple connections__ though (e.g. Euler tour problem not solveable). You could actually cut it at the diagonal to avoid duplicate edges (from-to, to-from)
 
 + Adjacency-list representation: vertex-indexed array of linked-lists (generally a *bag*), where each linked-list (chain) contains all the vertices that vertex is connected to. __Better if the graph is *sparse*, i.e. many vertices, few edges.__
 

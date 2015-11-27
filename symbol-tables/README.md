@@ -41,11 +41,11 @@ You should test equality of fields that usually differ first.
 	- Linked list of key-value pairs (nodes).
 	- Keep unordered.
 	- Search: Scan through all keys until find a match O(N).
-	- Insert: Scan trhough all keys until find a match; if no match add to front O(N).
+	- Insert: Scan through all keys until find a match; if no match add to front O(N).
 2. Binary search in an ordered array.
 	- Parallel arrays, one for keys and one for values
 	- Keys in sorted order, do binary search for key and retrieve value at parallel index.
-	- If unsucessful search, insert new value/pair at last index found.
+	- If unsuccessful search, insert new value/pair at last index found.
 	- Problem: data shift.
 	- Search: O(lg N)
 	- Insert: O(N)
@@ -132,7 +132,7 @@ Keep an extra field in each node to store the size of the subtree.
 	+ base case the node is null, return 0
 	+ if the key is greater than the current node, return the size of the left subtree (all less than node), + 1 for the current node and add the result of a further recursive call to the right
 	+ if the key is less than the current node, do a recursive call to the left
-	+ if the key is found (equal to the node), return the size of left subtree
+	+ if the key is found (equal to the node), return 1 + the size of left subtree
 - select()
 
 Iteration: Inorder traversal:
@@ -177,10 +177,12 @@ Insert into a 3-node at bottom:
 
 To move Z into this tree (P is a 2-node, S/Z is a 3-node):
 
+```
    R
   / \
  P  S/X
 / \ /|\
+```
 
 Z is temporarily moved into the S/X three node (creates a 4-node):
 
@@ -238,17 +240,19 @@ Practically speaking the implementation is complicated.
 - No node has two red links connected to it.
 - Every path from root to null link has the same number of black links.
   + The reason why is that the red links are just "proxy-links" to simplify
-  	the 2-3 tree structure. In a 2-3 tree, all paths from the root to null have the same length (the tree is balanced). A red-black tree is not directly balanced like that because the 3-nodes are split up into two 2-nodes, so the red-black tree could be higher. However, if you don't count the red paths (because they would be part of the same node in a 2-3 tree, and we're modelling/simplifying that), the distance from root to null is always the same, i.e. every node on one level has the same number of *black links*. Therefere there is *black balance*: every path from root to null has the same number of black links (don't count the red ones!).
+  	the 2-3 tree structure. In a 2-3 tree, all paths from the root to null have the same length (the tree is balanced). A red-black tree is not directly balanced like that because the 3-nodes are split up into two 2-nodes, so the red-black tree could be higher. However, if you don't count the red paths (because they would be part of the same node in a 2-3 tree, and we're modelling/simplifying that), the distance from root to null is always the same, i.e. every node on one level has the same number of *black links*. Therefore there is *black balance*: every path from root to null has the same number of black links (don't count the red ones!).
 - Red links lean left.
 
 Sometimes we need to rotate a right-leaning link to lean left:
 
+```
     E
    / \ (RED)
 (< E) \
        S
       / \
  (E < S) (> S)
+```
 
  So we set:
 
@@ -257,12 +261,13 @@ Sometimes we need to rotate a right-leaning link to lean left:
  - S' color to E's color (BLACK)
  - E's color to RED
 
+```
        S
       / \
      E   (> S)
 (R) /  \
  (< E) (E < S)
-
+```
 
 Invariant:
 - Perfect black balance.
@@ -270,14 +275,18 @@ Invariant:
 
 Color Flip: re-color to split a (temporary) 4-node.
 
-Proposition: Height of tree is <= 2 lg N in the worst case.
+Proposition: Height of tree is $\leq 2 lg N$ in the worst case.
 
 Proof:
 - Every path from root to null link has the same number of *black links*.
 - Never two red links in-a-row (we'd rotate then).
 - Best case: only black: lg(N)
-- Worst case: one red for every black: 2 * lg(N)
+- Worst case: one red for every black: $2 \cdot \lg(N)$
 
 You can save memory by not storing the color information in a boolean, but rather either:
-+ Keep a bitset with heap-like ordering of bits (i.e. bit 0 for root, children at 2k and 2k + 1, parents at k/2 for any level `k`)
++ Keep a bitset with heap-like ordering of bits (i.e. bit 1 for root, children at 2k and 2k + 1, parents at k/2 for any level `k`)
 + Swap the left and right children. For a BST, it is expected that the left child is smaller and the right child is greater, if that is not the case it signifies a red link (have to retrieve the smaller node during traversal then; cost/time tradeoff)
+
+## Gotchas
+
+* When inserting a new *node* (in the subscript operator) and the key is already present, don't forget to link the new node's children to the ones of the node you delete, before doing deleting it.

@@ -9,8 +9,8 @@ Lecture: https://www.youtube.com/watch?v=OQ5jsbhAv_M
 
 Recurrence relation:
 
-F_1 = F_2 = 1
-F_n = F_n-1 + F_n-2
+$F_1 = F_2 = 1$
+$F_n = F_n-1 + F_n-2$
 
 Naive recursive algorithm:
 
@@ -23,11 +23,11 @@ def fib(n):
 
 Complexity: exponential
 
-T(N) = T(N - 1) + T(N - 2) + O(1)
+$T(N) = T(N - 1) + T(N - 2) + O(1)$
 
-F_n is approximately equal to the golden ratio phi to the n-th power: φ^n
+$F_n$ is approximately equal to the golden ratio phi to the n-th power: $\phi^n$
 
-T(N) >= 2T(N - 2) = 2^(N/2) -> O(2^(N/2))
+$T(N) \geq 2T(N - 2) = 2^{N/2} \rightarrow O(2^{N/2})$
 
 ## Memoization
 
@@ -56,7 +56,7 @@ def fib(n):
 	return cache[n]
 ```
 
-Can also use an array (even more efficient, especially if no hash-tables available -> C++):
+Can also use an array (even more efficient):
 
 ```Python
 def fib(n):
@@ -92,7 +92,7 @@ std::size_t fib(std::size_t n)
 }
 ```
 
-fib(k) only recurses the first time it's kalled for all k.
+fib(k) only recurses the first time it's called for all k.
 
 Memoized call is constant time: `O(1)`.
 
@@ -250,7 +250,7 @@ break at:
 
 Complexity O(N^3) worst case.
 
-## Sumproblems for strings
+## Subproblems for strings
 
 + Suffixes `x[i:]` for all `i`
 + Prefixes `x[:i]` for all i

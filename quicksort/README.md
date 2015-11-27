@@ -25,7 +25,7 @@ Preserving randomness: Shuffling is needed for performance guarantee (if the arr
 
 Duplicate keys: When duplicates are present, it is (counter-intuitively) better to stop on keys equal to the partioning item's key.
 
-Worst case: O(N^2)
+Worst case: $O(N^2)$
 - More likely that your computer is struck by lightning bolt (random-shuffle)
 - Negligible case.
 
@@ -130,3 +130,4 @@ Quick3    |   Yes     |   No    | N^2/2 |  2N lgN |   N   | Improves Quicksort f
 * In the partitioning algorithm, make sure to increment `begin` after swapping, else you have an endless loop for sequences with only one distinct key.
 * Make sure that after partitioning you sort from `(begin, pivot)` and `(__pivot + 1__, end)` (emphasis on the + 1 for pivot; don't include it).
 * Make sure to check if there is only one value in the partitioning algorithm, else if you do `pivot = begin++` and then `--end` in the for loop, those will move past each other.
+* In the *single-function* version, __do not use the original iterators__, i.e. begin and end to partition the sequence! They are needed after (use `std::next(begin)` and `std::prev(end)`)
