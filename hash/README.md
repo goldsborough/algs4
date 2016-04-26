@@ -287,3 +287,7 @@ i.e. a polynomial of order *k-1* with arbitrary constants *0 < a_i < p*.
 - Avalanching hash functions: functions where small changes in the input cause great changes in the output: i.e. h("hel") and h("hell") produce entirely different hash values given only the very small change in the input.
 
 - When storing passwords, it is a good idea to not associate the actual password with the user, but the output of a hash function for that password. That way, if a hacker runs off with your passwords/user data, he or she gets not the real passwords, but only the useless hash-values. When logging in, simply run the input through the same hash function and see if it hashes to the value associated with the user in the database. Just make sure the attacker cannot see/get your hash function.
+
+## Additional
+
+* Notes you don't necessarily need to double the size if a chain gets too long, you could also choose a different hash-function.

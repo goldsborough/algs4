@@ -17,7 +17,7 @@ Phase I: Repeat until i and j pointers cross.
 - Scan j from right to left while a[j] > a[pivot] /  
 - Swap a[i] and a[j]
 
-Quicksort sorts in-place, as opposed to mergesort which requires an additional auxiliary array to perform the merge (space cost N).
+Quicksort sorts in-place, as opposed to Mergesort which requires an additional auxiliary array to perform the merge (space cost N).
 
 Terminating the loop: Testing whether the pointers cross is tricky, *especially with duplicate elements*.
 
