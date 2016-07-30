@@ -166,7 +166,6 @@ private:
 			size = 1;
 			
 			if (left) size += left->size;
-			
 			if (right) size += right->size;
 		}
 		

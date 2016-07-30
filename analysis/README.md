@@ -10,7 +10,7 @@
 ## Scientific Method
 
 - Observe some feature in the natural world.
-- Hypothesize a model that is consisten with the observations.
+- Hypothesize a model that is consistent with the observations.
 - Predict events using the hypothesis.
 - Verify the predictions by making further observations.
 - Validate by repeating until the hypothesis and observations agree.
@@ -73,9 +73,14 @@
 
 - Simplification 2
 
-  Ignore lower order terms, e.g. in *5 x N^3 + 20 x N + 16*, ignore the term with N and the constant 16 (which is 16 x N^0) because they are less significant in comparison with the highest order term. We use *tilde notation* to say that *5 x N^3 + 20 x N + 16 __~ 5 x N^3__*. Technical definition is that for *f(N) ~ G(N)* when *N* goes towards infinity, the lower order terms become so insignificant that *f(N)/g(N) = 1*:
+  Ignore lower order terms, e.g. in 5xN^3 + 20N + 16, ignore the term with N
+  and the constant 16 (which is 16 x N^0) because they are less significant in
+  comparison with the highest order term. We use *tilde notation* to say that *5
+  x N^3 + 20 x N + 16 __~ 5 x N^3__*. Technical definition is that for *f(N) ~
+  G(N)* when *N* goes towards infinity, the lower order terms become so
+  insignificant that *f(N)/g(N) = 1*:
 
-  *f(N) ~ g(N) => lim(N -> ∞) f(N)/g(N) = 1*
+  *f(N) ~ g(N) <=> lim(N -> ∞) f(N)/g(N) = 1*
 
  # Order-of-Growth Classifications
 

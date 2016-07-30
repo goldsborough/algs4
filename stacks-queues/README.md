@@ -98,7 +98,11 @@ Interface:
 Implementations:
 
 - Linked list: have nodes with pointers to the next element, enqueue by adding elements to the back and dequeue from the front.
-- Array: Either enqueue by pushing back and dequeue by popping from the front and then moving all subsequent elements back by one index, or use a circular buffer with a first and last index, both wrapping around the array (increment modulo the capacity).
+- Array: Either enqueue by pushing back and dequeue by popping from the front
+  and then moving all subsequent elements back by one index, or use a circular
+  buffer with a first and last index, both wrapping around the array (increment
+  modulo the capacity).
+
 
 ## Bag
 
@@ -109,3 +113,16 @@ Interface:
 - add(item): adds an item
 - size(): returns the size
 - iterator(): returns an iterator
+
+## Linked List in General
+
+An interesting idea to avoid overhead from excess allocation, deallocation and
+reallocation is to keep a *pool* or *free list* of nodes. One could thus have a
+__static__ list of allocated nodes for a queue implementation, and then for each
+concrete instance of the queue first check if any allocated nodes exist in this
+static free list. If so, no allocation is required. Depending on system and
+program requirements, this could be quite an interesting means to avoid
+performance loss from allocation. One could have an allocator class which is
+responsible for managing capacity. At the start of the insert method, one would
+then check if the free list is empty, else request allocation. Either way, the
+next node would be retrieved via a `new_node()` method from the allocator.

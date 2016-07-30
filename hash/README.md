@@ -120,9 +120,16 @@ Mean displacement of new keys:
 - If $M/2$ space occupied, mean displacement is $\approx 3/2$.
 - For full array, mean displacement is $\approx \sqrt{\frac{\pi M}{8}}$
 
-M should be significantly larger than N, typically a = N/M ~ 1/2 (M = 2N).
+M should be significantly larger than N, typically $a = N/M ~ 1/2 (M = 2N)$.
 
-One major problem of this method is clustering, here called *primary clustering*, i.e. the formation of long chains of keys. The problem with clusters is that the longer they are, the *more likely they are to get longer*, since, given the uniform hashing assumption, the probability to hash into a cluster of size $x$ in a table of size $m$ is $\frac{x + 1}{m}$. $x$ for the values already in the cluster and plus $1$ for the spot to the right of the cluster. Especially harmful are insertions into the only spot between two clusters (i.e. joining them).
+One major problem of this method is clustering, here called *primary
+clustering*, i.e. the formation of long chains of keys. The problem with
+clusters is that the longer they are, the *more likely they are to get longer*,
+since, given the uniform hashing assumption, the probability to hash into a
+cluster of size $x$ in a table of size $m$ is $\frac{x + 1}{m}$. $x$ for the
+values already in the cluster and plus $1$ for the spot to the right of the
+cluster. Especially harmful are insertions into the only spot between two
+clusters (i.e. joining them).
 
 ## Quadratic probing
 
@@ -130,22 +137,35 @@ Another method that causes clustering, but less of it, thus termed *secondary cl
 
 $h(k, i) = h'(k) + c_1i + c_2i^2 \mod m$
 
-where $h'(k)$ is an auxiliary pre-hashing function, $c_1$ and $c_2$ are randomly chosen constants and $i$ is the probe sequence index. Note that the key, i.e. the initial probe value, determines the entire sequence, thus two keys $k_1$ and $k_2$ where $h'(k_1) = h'(k_2)$ will hash to the same locations. This method simply limits primary clustering (and replaces it with *secondary clustering*).
+where $h'(k)$ is an auxiliary pre-hashing function, $c_1$ and $c_2$ are randomly
+chosen constants and $i$ is the probe sequence index. Note that the key,
+i.e. the initial probe value, determines the entire sequence, thus two keys
+$k_1$ and $k_2$ where $h'(k_1) = h'(k_2)$ will hash to the same locations. This
+method simply limits primary clustering (and replaces it with *secondary
+clustering*).
 
 ## Double hashing
 
-Double hashing greatly reduces clustering and is one of the best methods for hashing in open-addressed schemes. It uses two auxiliary pre-hashing functions $h_1(k)$ and $h_2(k)$, such that the hashing function $h(k, i)$ is of the form:
+Double hashing greatly reduces clustering and is one of the best methods for
+hashing in open-addressed schemes. It uses two auxiliary pre-hashing functions
+$h_1(k)$ and $h_2(k)$, such that the hashing function $h(k, i)$ is of the form:
 
 $h(k, i) = [h_1(k) + i \cdot h_2(k)] \mod m$
 
-The initial probe goes to the position of $h_1(k)$ and all subsequent probes go to integer multiples of $h_2(k)$ positions further. This method is effective because for two keys $h_1$ and $h_2$ is is very unlikely that if already $h_1(k_1) = h_1(k_2)$ also $h_2(k_1) = h_2(k_2)$.
+The initial probe goes to the position of $h_1(k)$ and all subsequent probes go
+to integer multiples of $h_2(k)$ positions further. This method is effective
+because for two keys $h_1$ and $h_2$ is is very unlikely that if already
+$h_1(k_1) = h_1(k_2)$ also $h_2(k_1) = h_2(k_2)$.
 
-__It is important that $h_2(k)$ be relatively prime to the table size $m$ for the entire table to be searched.__ There are two ways to ensure this:
+__It is important that $h_2(k)$ be relatively prime to the table size $m$ for
+the entire table to be searched.__ There are two ways to ensure this:
 
-1. Make the table size $m$ prime and ensure that $h_2$ always returns a positive integer less than $m$.
+1. Make the table size $m$ prime and ensure that $h_2$ always returns a *positive*
+   integer less than $m$.
 2. __Let $m$ be a power of two__ and __make $h_2$ return an odd number__.
 
-The second method is more sensical for doubling tables. $h_2$ could work in the following way, where $x$ is the returned value:
+The second method is more sensical for doubling tables. $h_2$ could work in the
+following way, where $x$ is the returned value:
 
 ```C++
 return x % 2 ? x : x + 1;
@@ -276,7 +296,8 @@ k-wise independent hash functions have the property that for every set of *k* ke
 
 $Pr{h(x) = a_1 ∧ h(y) = a_1} = 1/m^2 = (1/m) x (1/m)$
 
-i.e. that the call to *h(y)* is independent from the call to *h(x)*. A hash function to achieve this:
+i.e. that the call to $h(y)$ is independent from the call to $h(x)$. A hash
+function to achieve this:
 
 $$h(x) = \left[\left(\sum_{i=0}^{k-1} a_i x^i\right) \mod p\right] \mod m$$
 
@@ -284,10 +305,29 @@ i.e. a polynomial of order *k-1* with arbitrary constants *0 < a_i < p*.
 
 ## Other
 
-- Avalanching hash functions: functions where small changes in the input cause great changes in the output: i.e. h("hel") and h("hell") produce entirely different hash values given only the very small change in the input.
+- Avalanching hash functions: functions where small changes in the input cause
+  great changes in the output: i.e. h("hel") and h("hell") produce entirely
+  different hash values given only the very small change in the input.
 
-- When storing passwords, it is a good idea to not associate the actual password with the user, but the output of a hash function for that password. That way, if a hacker runs off with your passwords/user data, he or she gets not the real passwords, but only the useless hash-values. When logging in, simply run the input through the same hash function and see if it hashes to the value associated with the user in the database. Just make sure the attacker cannot see/get your hash function.
+- When storing passwords, it is a good idea to not associate the actual password
+  with the user, but the output of a hash function for that password. That way,
+  if a hacker runs off with your passwords/user data, he or she gets not the
+  real passwords, but only the useless hash-values. When logging in, simply run
+  the input through the same hash function and see if it hashes to the value
+  associated with the user in the database. Just make sure the attacker cannot
+  see/get your hash function.
 
 ## Additional
 
-* Notes you don't necessarily need to double the size if a chain gets too long, you could also choose a different hash-function.
+* Note you don't necessarily need to double the size if a chain gets too long,
+  you could also choose a different hash-function.
+
+(a,b)
+
+keys   [0 | 1 | 2 | 3] h(key)
+         |
+	    [a]     [d]
+		 |       |
+	    [c]     [b]
+		        |
+values [0 | 1 | 2 | 3] h(value)
